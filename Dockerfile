@@ -1,19 +1,17 @@
-FROM node:16
+FROM node:10-alpine
 
-# Create app directory
-# WORKDIR /usr/src/app
+RUN mkdir -p /home/node/app/node_modules && chown -R node:node /home/node/app
 
-# Install app dependencies
-# A wildcard is used to ensure both package.json AND package-lock.json are copied
-# where available (npm@5+)
+WORKDIR /home/node/app
+
 COPY package*.json ./
 
-RUN npm install  --production
-# If you are building your code for production
-# RUN npm ci --only=production
+USER node
 
-# Bundle app source
-COPY . .
+RUN npm install
 
-EXPOSE 3000
-CMD [ "node", "server.js" ]
+COPY --chown=node:node . .
+
+EXPOSE 8080
+
+CMD [ "node", "app.js" ]
