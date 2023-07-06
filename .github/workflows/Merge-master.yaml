@@ -13,6 +13,8 @@ jobs:
         uses: actions/checkout@v2
         with:
           fetch-depth: 0 # fetch all history for all branches
+          token: ${{ secrets.PERSONAL_TOKEN }}
+
       - name: Merge changes into other branches
         run: |
           git config user.name "dev3fyfy"
