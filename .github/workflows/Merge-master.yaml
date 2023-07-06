@@ -19,13 +19,20 @@ jobs:
         run: |
           git config user.name "dev3fyfy"
           git config user.email "dev.ahmed.afifi@gmail.com"
-          echo "$(git branch --format='%(refname:lstrip=2)')"
-          for branch in $(git branch --format='%(refname:lstrip=2)'); do
-              echo "$branch"
+          conflicts=""
+          for branch in $(git ls-remote --heads origin | awk -F'/' '{print $3}'); do
             if [ "$branch" != "master" ]; then
-              echo "$branch"
               git checkout "$branch"
               git merge --no-ff --no-edit origin/master
-              git push origin "$branch"
+              if [ $? -ne 0 ]; then
+                conflicts="$conflicts $branch"
+              else
+                git push origin "$branch"
+              fi
             fi
           done
+          if [ -n "$conflicts" ]; then
+            echo "Merge conflicts occurred in the following branches:$conflicts"
+          else
+            echo "No merge conflicts occurred."
+          fi
