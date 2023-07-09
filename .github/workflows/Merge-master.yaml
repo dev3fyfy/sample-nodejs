@@ -50,7 +50,7 @@ jobs:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 #           CONFLICTS: ${{ env.conflicts }}
         run: |
-          ls  $conflicts
+          echo  "$conflicts"
           for branch in $conflicts; do
             if [ "$branch" != "master" ]; then
               echo "Creating pull request for $branch"
