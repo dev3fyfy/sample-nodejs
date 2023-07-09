@@ -39,18 +39,12 @@ jobs:
                     "head": "master",
                     "base": "'"$branch"'"
                   }'
-                pull_request_url+=$(echo "$response" | jq -r '.html_url')
               }
-              if [ -z "$(git status --porcelain)" ]; then
-                git push origin "$branch"
-              else
-                git commit -am "Merge branch 'master' into $branch"
-                git push origin "$branch"
-              fi
+
             fi
           done
           if [ ${#conflicts[@]} -gt 0 ]; then
-            echo "Merge conflicts occurred in the following branches: ${conflicts[@]} \n ${pull_request_url[@]}"
+            echo "Merge conflicts occurred in the following branches: ${conflicts[@]} "
           else
             echo "No merge conflicts occurred."
           fi
