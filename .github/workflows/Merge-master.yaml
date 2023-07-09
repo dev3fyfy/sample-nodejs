@@ -38,12 +38,11 @@ jobs:
           done
           if [ ${#conflicts[@]} -gt 0 ]; then
             echo "Merge conflicts occurred in the following branches: ${conflicts[@]}"
-            echo "::set-output name=merge_conflicts::true"
           else
             echo "No merge conflicts occurred."
-            echo "::set-output name=merge_conflicts::false"
           fi
           for branch in $conflicts; do
+          echo $branch
             if [ "$branch" != "master" ]; then
               echo "Creating pull request for $branch"
               curl --request POST \
