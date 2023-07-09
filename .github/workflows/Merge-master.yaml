@@ -43,6 +43,7 @@ jobs:
             echo "No merge conflicts occurred."
             echo "::set-output name=merge_conflicts::false"
           fi
+          echo "$conflicts" >> $GITHUB_ENV
 
       - name: Create pull requests for conflicted branches
         env:
