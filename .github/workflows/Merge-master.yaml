@@ -44,16 +44,23 @@ jobs:
             echo "::set-output name=merge_conflicts::false"
           fi
 
-      - name: Create pull request
-        if: steps.merge.outputs.merge_conflicts == 'true'
-        uses: peter-evans/create-pull-request@v3
-        with:
-          title: 'Merge master into all branches (auto)'
-          commit-message: 'Merge master into all branches (auto)'
-          branch: 'merge-master-into-all-branches'
-          body: |
-            There were merge conflicts when attempting to merge changes from `master` into the following branches:
-
-            ${conflicts[@]}
-
-            Please resolve the conflicts and merge the changes manually.
+      - name: Create pull requests for conflicted branches
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          CONFLICTS: ${{ env.conflicts }}
+        run: |
+          for branch in $conflicts; do
+            if [ "$branch" != "master" ]; then
+              echo "Creating pull request for $branch"
+              curl --request POST \
+                --url https://api.github.com/repos/$GITHUB_REPOSITORY/pulls \
+                --header 'authorization: Bearer $GITHUB_TOKEN' \
+                --header 'content-type: application/json' \
+                --data '{
+                  "title": "Merge master into '"$branch"' (auto)",
+                  "body": "There were merge conflicts when attempting to merge changes from \`master\` into this branch. Please resolve the conflicts and merge the changes manually.",
+                  "head": "master",
+                  "base": "'"$branch"'"
+                }'
+            fi
+          done
