@@ -21,6 +21,7 @@ jobs:
           git config user.name "dev3fyfy"
           git config user.email "dev.ahmed.afifi@gmail.com"
           conflicts=""
+          pull_request_url=""
           for branch in $(git ls-remote --heads origin | awk -F'/' '{print $3}'); do
             if [ "$branch" != "master" ]; then
               git checkout "$branch"
@@ -38,7 +39,7 @@ jobs:
                     "head": "master",
                     "base": "'"$branch"'"
                   }'
-                pull_request_url=$pull_request_url \n $(echo "$response" | jq -r '.html_url')
+                pull_request_url+=$(echo "$response" | jq -r '.html_url')
               }
               if [ -z "$(git status --porcelain)" ]; then
                 git push origin "$branch"
