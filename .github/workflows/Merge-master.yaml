@@ -43,14 +43,14 @@ jobs:
             echo "No merge conflicts occurred."
             echo "::set-output name=merge_conflicts::false"
           fi
-          echo "$conflicts" >> $GITHUB_ENV
+          echo $conflicts >> $GITHUB_ENV
 
       - name: Create pull requests for conflicted branches
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-#           CONFLICTS: ${{ env.conflicts }}
+          CONFLICTS: ${{ env.conflicts }}
         run: |
-          echo  "$conflicts"
+          echo  $conflicts
           for branch in $conflicts; do
             if [ "$branch" != "master" ]; then
               echo "Creating pull request for $branch"
