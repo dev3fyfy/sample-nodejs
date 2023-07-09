@@ -48,8 +48,9 @@ jobs:
       - name: Create pull requests for conflicted branches
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-          CONFLICTS: ${{ env.conflicts }}
+#           CONFLICTS: ${{ env.conflicts }}
         run: |
+          ls  $conflicts
           for branch in $conflicts; do
             if [ "$branch" != "master" ]; then
               echo "Creating pull request for $branch"
