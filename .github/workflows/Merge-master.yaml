@@ -27,6 +27,17 @@ jobs:
               git merge --no-commit --no-ff --no-edit origin/master || {
                 git merge --abort
                 conflicts+=("$branch")
+                echo "Creating pull request for $branch"
+                curl --request POST \
+                --url https://api.github.com/repos/$GITHUB_REPOSITORY/pulls \
+                --header 'authorization: Bearer $GITHUB_TOKEN' \
+                --header 'content-type: application/json' \
+                --data '{
+                  "title": "Merge master into '"$branch"' (auto)",
+                  "body": "There were merge conflicts when attempting to merge changes from \`master\` into this branch. Please resolve the conflicts and merge the changes manually.",
+                  "head": "master",
+                  "base": "'"$branch"'"
+                }'
               }
               if [ -z "$(git status --porcelain)" ]; then
                 git push origin "$branch"
@@ -41,20 +52,5 @@ jobs:
           else
             echo "No merge conflicts occurred."
           fi
-          for branch in $conflicts; do
-          echo $branch
-            if [ "$branch" != "master" ]; then
-              echo "Creating pull request for $branch"
-              curl --request POST \
-                --url https://api.github.com/repos/$GITHUB_REPOSITORY/pulls \
-                --header 'authorization: Bearer $GITHUB_TOKEN' \
-                --header 'content-type: application/json' \
-                --data '{
-                  "title": "Merge master into '"$branch"' (auto)",
-                  "body": "There were merge conflicts when attempting to merge changes from \`master\` into this branch. Please resolve the conflicts and merge the changes manually.",
-                  "head": "master",
-                  "base": "'"$branch"'"
-                }'
-            fi
-          done
+
 
