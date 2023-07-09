@@ -1,0 +1,46 @@
+name: Merge to branches
+
+# Trigger the workflow on push or pull request events to the master branch
+on:
+  push:
+    branches:
+      - master
+  pull_request:
+    branches:
+      - master
+
+jobs:
+  merge_to_branches:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v2
+
+      - name: Get list of branches to merge
+        run: |
+          # Replace the branch list with your own list
+          branches="branch-1 branch-2 branch-3"
+          echo "::set-output name=branches::$branches"
+
+      - name: Merge changes to branches
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          for branch in ${{ steps.get_branches.outputs.branches }}; do
+            # Cherry-pick the latest commit from master to the branch
+            git checkout "$branch"
+            git cherry-pick -x master
+            # Push the changes to the branch
+            git push --set-upstream origin "$branch"
+            # Create a pull request from the branch to master
+            curl --request POST \
+              --url https://api.github.com/repos/$GITHUB_REPOSITORY/pulls \
+              --header 'authorization: Bearer $GITHUB_TOKEN' \
+              --header 'content-type: application/json' \
+              --data '{
+                "title": "Merge changes from master",
+                "body": "This pull request merges changes from \`master\` to \`'"$branch"'\` using cherry-pick.",
+                "head": "'"$branch"'",
+                "base": "master"
+              }'
+          }
