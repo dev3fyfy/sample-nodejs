@@ -45,19 +45,22 @@ jobs:
           fi
 
       - name: Create pull requests for conflicted branches
-        uses: peter-evans/create-pull-request@v3
-        with:
-          title: "Merge master into $branch (auto)"
-          body: "There were merge conflicts when attempting to merge changes from  into this branch. Please resolve the conflicts and merge the changes manually."
-          head: "master"
-          base: "$branch"
         env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           CONFLICTS: ${{ env.conflicts }}
         run: |
           for branch in $conflicts; do
             if [ "$branch" != "master" ]; then
               echo "Creating pull request for $branch"
-              sed -i "s/\$branch/$branch/g" $GITHUB_ACTION_PATH/*
-              sh $GITHUB_ACTION_PATH/*
+              curl --request POST \
+                --url https://api.github.com/repos/$GITHUB_REPOSITORY/pulls \
+                --header 'authorization: Bearer $GITHUB_TOKEN' \
+                --header 'content-type: application/json' \
+                --data '{
+                  "title": "Merge master into '"$branch"' (auto)",
+                  "body": "There were merge conflicts when attempting to merge changes from \`master\` into this branch. Please resolve the conflicts and merge the changes manually.",
+                  "head": "master",
+                  "base": "'"$branch"'"
+                }'
             fi
           done
