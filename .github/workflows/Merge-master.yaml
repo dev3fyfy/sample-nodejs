@@ -16,6 +16,7 @@ jobs:
           token: ${{ secrets.PERSONAL_TOKEN }}
 
       - name: Merge changes into other branches
+        id: merge
         run: |
           git config user.name "dev3fyfy"
           git config user.email "dev.ahmed.afifi@gmail.com"
@@ -33,6 +34,22 @@ jobs:
           done
           if [ -n "$conflicts" ]; then
             echo "Merge conflicts occurred in the following branches:$conflicts"
+            echo "::set-output name=merge_conflicts::true"
           else
             echo "No merge conflicts occurred."
+            echo "::set-output name=merge_conflicts::false"
           fi
+
+      - name: Create pull request
+        if: steps.merge.outputs.merge_conflicts == 'true'
+        uses: peter-evans/create-pull-request@v3
+        with:
+          title: 'Merge master into all branches (auto)'
+          commit-message: 'Merge master into all branches (auto)'
+          branch: 'merge-master-into-all-branches'
+          body: |
+            There were merge conflicts when attempting to merge changes from `master` into the following branches:
+
+            ${{ env.conflicts }}
+
+            Please resolve the conflicts and merge the changes manually.
