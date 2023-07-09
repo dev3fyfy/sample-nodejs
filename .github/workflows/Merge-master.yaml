@@ -26,7 +26,7 @@ jobs:
               git checkout "$branch"
               git merge --no-commit --no-ff --no-edit origin/master || {
                 git merge --abort
-                conflicts="$conflicts $branch"
+                conflicts+=("$branch")
               }
               if [ -z "$(git status --porcelain)" ]; then
                 git push origin "$branch"
@@ -36,10 +36,12 @@ jobs:
               fi
             fi
           done
-          if [ -n "$conflicts" ]; then
-            echo "Merge conflicts occurred in the following branches:$conflicts"
+          if [ ${#conflicts[@]} -gt 0 ]; then
+            echo "Merge conflicts occurred in the following branches: ${conflicts[@]}"
+            echo "::set-output name=merge_conflicts::true"
           else
             echo "No merge conflicts occurred."
+            echo "::set-output name=merge_conflicts::false"
           fi
 
       - name: Create pull request
@@ -52,6 +54,6 @@ jobs:
           body: |
             There were merge conflicts when attempting to merge changes from `master` into the following branches:
 
-            ${{ env.conflicts }}
+            ${conflicts[@]}
 
             Please resolve the conflicts and merge the changes manually.
