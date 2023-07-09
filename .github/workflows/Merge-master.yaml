@@ -48,7 +48,7 @@ jobs:
         uses: peter-evans/create-pull-request@v3
         with:
           title: "Merge master into $branch (auto)"
-          body: "There were merge conflicts when attempting to merge changes from \`master\` into this branch. Please resolve the conflicts and merge the changes manually."
+          body: "There were merge conflicts when attempting to merge changes from  into this branch. Please resolve the conflicts and merge the changes manually."
           head: "master"
           base: "$branch"
         env:
