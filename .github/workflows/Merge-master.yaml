@@ -28,7 +28,7 @@ jobs:
                 git merge --abort
                 conflicts+=("$branch")
                 echo "Creating pull request for $branch"
-                response=$(curl --request POST \
+                curl --request POST \
                   --url https://api.github.com/repos/$GITHUB_REPOSITORY/pulls \
                   --header 'authorization: Bearer ${{ secrets.PERSONAL_TOKEN }}' \
                   --header 'content-type: application/json' \
@@ -37,10 +37,8 @@ jobs:
                     "body": "There were merge conflicts when attempting to merge changes from  into this branch. Please resolve the conflicts and merge the changes manually.",
                     "head": "master",
                     "base": "'"$branch"'"
-                  }')
-                pull_request_url=$(echo "$response" | jq -r '.html_url')
-                # Send Slack message
-                curl -X POST -H 'Content-type: application/json' --data "{\"text\":\"New pull request created: ${pull_request_url}\"}" $SLACK_WEBHOOK_URL
+                  }'
+                pull_request_url=$pull_request_url \n $(echo "$response" | jq -r '.html_url')
               }
               if [ -z "$(git status --porcelain)" ]; then
                 git push origin "$branch"
@@ -51,7 +49,7 @@ jobs:
             fi
           done
           if [ ${#conflicts[@]} -gt 0 ]; then
-            echo "Merge conflicts occurred in the following branches: ${conflicts[@]}"
+            echo "Merge conflicts occurred in the following branches: ${conflicts[@]} \n $pull_request_url"
           else
             echo "No merge conflicts occurred."
-          fi"
+          fi
