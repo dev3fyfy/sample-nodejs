@@ -22,6 +22,8 @@ jobs:
           git config user.name "dev3fyfy"
           git config user.email "dev.ahmed.afifi@gmail.com"
           conflicts=""
+          curl -X POST -H 'Content-type: application/json' --data '{"text":"Hello, World!"}' https://hooks.slack.com/services/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
+
           pull_request_url=""
           for branch in $(git ls-remote --heads origin | awk -F'/' '{print $3}'); do
             if [ "$branch" != "master" ]; then
