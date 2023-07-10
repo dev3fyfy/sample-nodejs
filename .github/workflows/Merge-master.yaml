@@ -42,7 +42,7 @@ jobs:
                     "base": "'"$branch"'"
                   }')
                 pull_request_url=$(curl -H "Authorization: Bearer ${{ secrets.PERSONAL_TOKEN }}" \
-                "https://api.github.com/repos/$GITHUB_REPOSITORY/pulls?head=master&base='$branch'" | jq -r '.html_url')
+                "https://api.github.com/repos/$GITHUB_REPOSITORY/pulls?head=master&base='$branch'" | jq '.[0].html_url')
                 curl -X POST -H 'Content-type: application/json' \
                 --data '{"text":"Hello, world! '"$pull_request_url"'  "}' \
                  ${{ secrets.SLACK_WEBHOOK_URL }}
