@@ -30,7 +30,7 @@ jobs:
                 git merge --abort
                 conflicts+=("$branch")
                 echo "Creating pull request for $branch"
-                respons=$(curl --request POST \
+                response=$(curl --request POST \
                   --url https://api.github.com/repos/$GITHUB_REPOSITORY/pulls \
                   --header 'authorization: Bearer ${{ secrets.PERSONAL_TOKEN }}' \
                   --header 'content-type: application/json' \
@@ -40,6 +40,7 @@ jobs:
                     "head": "master",
                     "base": "'"$branch"'"
                   }')
+                echo "$response"
                 echo "pull_request_url $(echo "$response" | jq -r '.html_url')"
                 pull_request_url+=$(echo "$response" | jq -r '.html_url')
               }
