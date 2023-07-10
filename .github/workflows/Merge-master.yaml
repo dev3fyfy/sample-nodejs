@@ -71,7 +71,8 @@ jobs:
           done
           if [ ${#conflicts[@]} -gt 0 ]; then
             echo "Merge conflicts occurred in the following branches: ${conflicts[@]} \n ${PR_URL[@]}"
-            echo "PR_URL=${PR_URL}" >> $GITHUB_ENV                   
+            printf -v PR_URL_STR "PR_URL=%s\n" "${PR_URL[@]}"
+            echo "PR_URL= ${PR_URL_STR}" >> $GITHUB_ENV                   
 
           else
             echo "No merge conflicts occurred."
