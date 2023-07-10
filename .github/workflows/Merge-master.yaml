@@ -58,7 +58,7 @@ jobs:
 
                  
                  
-                echo "puull request : ${ epull_request_url }"
+                echo "puull request : ${ pull_request_url }"
 
               }
               if [ -z "$(git status --porcelain)" ]; then
