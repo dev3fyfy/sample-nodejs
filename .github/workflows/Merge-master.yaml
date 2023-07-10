@@ -40,11 +40,11 @@ jobs:
                     "head": "master",
                     "base": "'"$branch"'"
                   }')
-                  curl -X POST -H 'Content-type: application/json' --data '{"text":"Hello, World!"}' $SLACK_WEBHOOK_URL
-
                 echo "$response"
                 echo "pull_request_url $(echo "$response" | jq -r '.html_url')"
                 pull_request_url+=$(echo "$response" | jq -r '.html_url')
+                  curl -X POST -H 'Content-type: application/json' --data '{"text":"Hello, World!"}' $SLACK_WEBHOOK_URL
+
               }
               if [ -z "$(git status --porcelain)" ]; then
                 git push origin "$branch"
