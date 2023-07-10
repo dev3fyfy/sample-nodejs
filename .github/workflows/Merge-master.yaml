@@ -48,7 +48,7 @@ jobs:
                 curl -X POST -H 'Content-type: application/json' \
                 --data '{"text":"Hello, world! '"$pull_request_url"'  "}' \
                  ${{ secrets.SLACK_WEBHOOK_URL }}
-                echo "$pull_request_url"
+                echo "puull request : $pull_request_url"
 
               }
               if [ -z "$(git status --porcelain)" ]; then
