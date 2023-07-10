@@ -48,10 +48,10 @@ jobs:
                 pull_request_url=$(curl -H "Authorization: Bearer ${{ secrets.PERSONAL_TOKEN }}" \
                 "https://api.github.com/repos/$GITHUB_REPOSITORY/pulls?head=master&base=$branch" | jq '.[0].html_url')
               
-              
+                echo "URL=$(echo $pull_request_url )" >> $GITHUB_ENV
               
                 curl -X POST -H 'Content-type: application/json' \
-                --data '{"text": $pull_request_url  }' \
+                --data '{"text": "${{ URL }} "  }' \
                  ${{ secrets.SLACK_WEBHOOK_URL }}
                  
                  
