@@ -45,16 +45,16 @@ jobs:
                   }')
                   
  
-                pull_request_url=$(curl -H "Authorization: Bearer ${{ secrets.PERSONAL_TOKEN }}" \
-                "https://api.github.com/repos/$GITHUB_REPOSITORY/pulls?head=master&base=$branch" | jq '.[0].html_url')
-              
-                echo "PR_URL=${pull_request_url}" >> $GITHUB_ENV                
+                echo "pull_request_url=$(curl -H "Authorization: Bearer ${{ secrets.PERSONAL_TOKEN }}" \
+                "https://api.github.com/repos/$GITHUB_REPOSITORY/pulls?head=master&base=$branch" | jq '.[0].html_url')" >> $GITHUB_ENV    
+                   
+                
                 curl -X POST -H 'Content-type: application/json' \
-                --data '{"text": "${{ PR_URL }} "  }' \
+                --data '{"text": "${{ env.pull_request_url }} "  }' \
                  ${{ secrets.SLACK_WEBHOOK_URL }}
                  
                  
-                echo "puull request : $pull_request_url"
+                echo "puull request : ${{ env.pull_request_url }}"
 
               }
               if [ -z "$(git status --porcelain)" ]; then
