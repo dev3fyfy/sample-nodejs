@@ -49,6 +49,7 @@ jobs:
                 "https://api.github.com/repos/$GITHUB_REPOSITORY/pulls?head=master&base=$branch" | jq '.[0].html_url')     
                    
                 echo "URL=$(echo ${pull_request_url} )" >> $GITHUB_ENV
+                echo "URL : ${{ env.URL }} "
 
                 curl -X POST -H 'Content-type: application/json' \
                 --data '{"text": "${{ env.URL }} "  }' \
@@ -57,7 +58,7 @@ jobs:
 
                  
                  
-                echo "puull request : ${{ env.pull_request_url }}"
+                echo "puull request : ${ epull_request_url }"
 
               }
               if [ -z "$(git status --porcelain)" ]; then
