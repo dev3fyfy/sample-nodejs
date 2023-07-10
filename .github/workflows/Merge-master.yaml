@@ -70,7 +70,9 @@ jobs:
             fi
           done
           if [ ${#conflicts[@]} -gt 0 ]; then
-            echo "Merge conflicts occurred in the following branches: ${conflicts[@]} \n ${pull_request_url[@]}"
+            echo "Merge conflicts occurred in the following branches: ${conflicts[@]} \n ${PR_URL[@]}"
+            echo "PR_URL=$(echo '$PR_URL')" >> $GITHUB_ENV                   
+
           else
             echo "No merge conflicts occurred."
           fi
