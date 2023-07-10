@@ -45,10 +45,10 @@ jobs:
                   }')
                   
  
-                PR_URL=$(curl -H "Authorization: Bearer ${{ secrets.PERSONAL_TOKEN }}" \
+                PR_URL+=$(curl -H "Authorization: Bearer ${{ secrets.PERSONAL_TOKEN }}" \
                   "https://api.github.com/repos/$GITHUB_REPOSITORY/pulls?head=master&base=$branch" \
                   | jq -r '.[0].html_url')
-                echo "PR_URL=$(echo '$PR_URL')" >> $GITHUB_ENV                   
+                echo "PR_URL=$(echo '$PR_URL') , " >> $GITHUB_ENV                   
 
                 curl -X POST -H 'Content-type: application/json' \
                 --data '{"text": "${{ env.PR_URL }} "  }' \
@@ -74,3 +74,9 @@ jobs:
           else
             echo "No merge conflicts occurred."
           fi
+      - name:  print
+        run: |
+            echo "PR_URL request : ${{ env.PR_URL }} "
+            curl -X POST -H 'Content-type: application/json' \
+            --data '{"text": "${{ env.PR_URL }} "  }' \
+             ${{ secrets.SLACK_WEBHOOK_URL }}
