@@ -49,15 +49,15 @@ jobs:
                 "https://api.github.com/repos/$GITHUB_REPOSITORY/pulls?head=master&base=$branch" | jq '.[0].html_url')     
                    
 
-                curl -X POST -H 'Content-type: application/json' \
-                --data '{"text": "$(curl -H "Authorization: Bearer ${{ secrets.PERSONAL_TOKEN }}" \
-                "https://api.github.com/repos/$GITHUB_REPOSITORY/pulls?head=master&base=$branch" | jq '.[0].html_url')"  }' \
+                curl -X POST -H "Content-type: application/json" \
+                 --data "{\"text\": \"$(curl -H 'Authorization: Bearer ${{ secrets.PERSONAL_TOKEN }}' \
+                 'https://api.github.com/repos/$GITHUB_REPOSITORY/pulls?head=master&base=$branch' | jq -r '.[0].html_url')\"}" \
                  ${{ secrets.SLACK_WEBHOOK_URL }}
                 
 
                  
                  
-                echo "puull request : ${ pull_request_url }"
+                echo "puull request : $pull_request_url "
 
               }
               if [ -z "$(git status --porcelain)" ]; then
