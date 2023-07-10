@@ -40,10 +40,8 @@ jobs:
                     "head": "master",
                     "base": "'"$branch"'"
                   }')
-                curl -X POST -H 'Content-type: application/json' 
-                --url  $SLACK_WEBHOOK_URL
-                --data '{ 
-                  "text": "New pull request created: $(echo '$response' | jq -r '.html_url')" }'
+                  curl -X POST -H 'Content-type: application/json' --data '{"text":"Hello, World!"}' $SLACK_WEBHOOK_URL
+
                 echo "$response"
                 echo "pull_request_url $(echo "$response" | jq -r '.html_url')"
                 pull_request_url+=$(echo "$response" | jq -r '.html_url')
