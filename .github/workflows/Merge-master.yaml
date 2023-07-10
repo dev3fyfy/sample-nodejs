@@ -44,9 +44,7 @@ jobs:
                     "base": "'"$branch"'"
                   }')
                   
-                  
-                curl -H "Authorization: Bearer ${{ secrets.PERSONAL_TOKEN }}" \
-                "https://api.github.com/repos/$GITHUB_REPOSITORY/pulls?head=master&base='"$branch"'" 
+ 
                 pull_request_url=$(curl -H "Authorization: Bearer ${{ secrets.PERSONAL_TOKEN }}" \
                 "https://api.github.com/repos/$GITHUB_REPOSITORY/pulls?head=master&base=$branch" | jq '.[0].html_url')
               
