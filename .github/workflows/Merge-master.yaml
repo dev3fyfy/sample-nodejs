@@ -38,7 +38,7 @@ jobs:
                   --header 'authorization: Bearer ${{ secrets.PERSONAL_TOKEN }}' \
                   --header 'content-type: application/json' \
                   --data '{
-                    "title": "Merge master into '"$branch"' (auto) ${GITHUB_SHA::8}",
+                    "title": "Merge master into '"$branch"' (auto) '${GITHUB_SHA::8}'",
                     "body": "There were merge conflicts when attempting to merge changes from  into this branch. Please resolve the conflicts and merge the changes manually.",
                     "head": "master",
                     "base": "'"$branch"'"
@@ -51,7 +51,7 @@ jobs:
               
               
                 curl -X POST -H 'Content-type: application/json' \
-                --data '{"text":"Hello, world! $pull_request_url  "}' \
+                --data '{"text":"Hello, world! '$pull_request_url'  "}' \
                  ${{ secrets.SLACK_WEBHOOK_URL }}
                  
                  
