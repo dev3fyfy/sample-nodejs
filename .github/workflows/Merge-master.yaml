@@ -39,6 +39,7 @@ jobs:
                     "head": "master",
                     "base": "'"$branch"'"
                   }'
+                echo "pull_request_url $(echo "$response" | jq -r '.html_url')"
                 pull_request_url+=$(echo "$response" | jq -r '.html_url')
               }
               if [ -z "$(git status --porcelain)" ]; then
