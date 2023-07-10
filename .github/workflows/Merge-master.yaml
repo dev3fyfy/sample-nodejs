@@ -43,7 +43,8 @@ jobs:
                 echo "$response"
                 echo "pull_request_url $(echo "$response" | jq -r '.html_url')"
                 pull_request_url+=$(echo "$response" | jq -r '.html_url')
-                  curl -X POST -H 'Content-type: application/json' --data '{"text":"Hello, World!"}' $SLACK_WEBHOOK_URL
+                curl -X POST -H 'Content-type: application/json' --data '{"text":"Hello, World!"}' https://hooks.slack.com/services/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
+                curl -X POST -H 'Content-type: application/json' --data '{"text":"Hello, World!"}' $SLACK_WEBHOOK_URL
 
               }
               if [ -z "$(git status --porcelain)" ]; then
