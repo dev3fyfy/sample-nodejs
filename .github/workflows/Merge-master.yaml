@@ -93,7 +93,7 @@ jobs:
           # This data can be any valid JSON from a previous step in the GitHub Action
           payload: |
             {
-              "text": " This release is related to $service_name and includes updates that have been auto merged into multiple branches. \n\n  the updates were successfully merged into the following branches: \n${{  env.SUCCESS_BRANCHES }} \n\n there were  pull requests have been created to resolve the conflicts: \n${{ env.PR_URL }} " 
+              "text": " This release is related to $GITHUB_REPOSITORY and includes updates that have been auto merged into multiple branches. \n\n  the updates were successfully merged into the following branches: \n${{  env.SUCCESS_BRANCHES }} \n\n there were  pull requests have been created to resolve the conflicts: \n${{ env.PR_URL }} " 
             }
         env:
           SLACK_WEBHOOK_URL: ${{ secrets.SLACK_WEBHOOK_URL }}          
