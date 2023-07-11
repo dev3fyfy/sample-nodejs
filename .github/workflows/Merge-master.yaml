@@ -56,7 +56,7 @@ jobs:
  
                 PR_URL+="$branch : $(curl -H "Authorization: Bearer ${{ secrets.PERSONAL_TOKEN }}" \
                   "https://api.github.com/repos/$GITHUB_REPOSITORY/pulls?head=master&base=$branch" \
-                  | jq -r '.[0].html_url') \n   "
+                  | jq -r '.[0].html_url') \n"
 
                 
 
@@ -76,12 +76,13 @@ jobs:
 
           done
 
+            echo "SUCCESS_BRANCHES=${success_braches}" >> $GITHUB_ENV    
+
           if [ ${#conflicts_branches[@]} -gt 0 ]; then
             echo "Merge conflicts occurred in the following branches: ${conflicts_branches[@]} \n ${PR_URL[@]}"
             echo "PR_URL=${PR_URL}" >> $GITHUB_ENV    
           else
             echo "No merge conflicts occurred."
-            echo "SUCCESS_BRANCHES=${success_braches}" >> $GITHUB_ENV    
 
           fi
 
