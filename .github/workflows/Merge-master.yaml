@@ -19,8 +19,8 @@ jobs:
       - name: Merge changes into other branches
         id: merge
         run: |
-          git config user.name "dev3fyfy"
-          git config user.email "dev.ahmed.afifi@gmail.com"
+          git config user.name "maxabgh"
+          git config user.email "maxab_gh@maxab.io"
           conflicts=""
 
           pull_request_url=""
