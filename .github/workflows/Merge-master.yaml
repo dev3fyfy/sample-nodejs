@@ -49,7 +49,7 @@ jobs:
                   }')
                   
  
-                PR_URL+="$(curl -H "Authorization: Bearer ${{ secrets.PERSONAL_TOKEN }}" \
+                PR_URL+="$branch : $(curl -H "Authorization: Bearer ${{ secrets.PERSONAL_TOKEN }}" \
                   "https://api.github.com/repos/$GITHUB_REPOSITORY/pulls?head=master&base=$branch" \
                   | jq -r '.[0].html_url') \n   "
 
@@ -57,8 +57,10 @@ jobs:
 
               }
               if [ -z "$(git status --porcelain)" ]; then
+                echo "status ${branch}"
                 git push origin "$branch"
               else
+                echo "status else  ${branch}"
                 git commit -am "Merge branch 'master' into $branch"
                 git push origin "$branch"
               fi
@@ -76,7 +78,7 @@ jobs:
           # This data can be any valid JSON from a previous step in the GitHub Action
           payload: |
             {
-              "text": "Merge conflicts occurred in some  branches , Please check these PRs: \n ${{ env.PR_URL }} " 
+              "text": " This release is related to $service_name and includes updates that have been auto merged into multiple branches. \n\n  the updates were successfully merged into the following branches:   : \n ${{ env.PR_URL }} " 
             }
         env:
           SLACK_WEBHOOK_URL: ${{ secrets.SLACK_WEBHOOK_URL }}          
