@@ -27,6 +27,7 @@ jobs:
           conflicts=""
 
           pull_request_url=""
+          IFS=',' read -ra BRANCHES <<< "${BRANCHES}"
           for branch in "${BRANCHES[@]}"; do
             if [ "$branch" != "master" ]; then
             
