@@ -5,13 +5,14 @@ on:
   push:
     branches:
       - master
-env:
- BRANCHES: "main,main2,main3,add-app-spec"
+
 
 
 jobs:
   merge:
     runs-on: ubuntu-latest
+    env:
+     BRANCHES: "main,main2,main3,add-app-spec"
     steps:
       - name: Checkout code
         uses: actions/checkout@v2
