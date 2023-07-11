@@ -17,10 +17,9 @@ jobs:
           token: ${{ secrets.PERSONAL_TOKEN }}
 
       - name: Merge changes into other branches
-        id: merge
         run: |
-          git config user.name "maxabgh"
-          git config user.email "maxab_gh@maxab.io"
+          git config user.name "dev3fyfy"
+          git config user.email "dev.ahmed.afifi@gmail.com"
           conflicts=""
 
           pull_request_url=""
@@ -48,12 +47,10 @@ jobs:
                 PR_URL+="$(curl -H "Authorization: Bearer ${{ secrets.PERSONAL_TOKEN }}" \
                   "https://api.github.com/repos/$GITHUB_REPOSITORY/pulls?head=master&base=$branch" \
                   | jq -r '.[0].html_url') \n   "
-                echo "PR_URL=$(echo '$PR_URL') , " >> $GITHUB_ENV                   
 
                 
 
               }
-                echo "$(git status --porcelain)"
               if [ -z "$(git status --porcelain)" ]; then
                 git push origin "$branch"
               else
@@ -64,14 +61,18 @@ jobs:
           done
           if [ ${#conflicts[@]} -gt 0 ]; then
             echo "Merge conflicts occurred in the following branches: ${conflicts[@]} \n ${PR_URL[@]}"
-            printf -v PR_URL_STR "PR_URL=%s\n" "${PR_URL[@]}"
-            echo "PR_URL= ${PR_URL_STR}" >> $GITHUB_ENV    
+            echo "PR_URL=${PR_URL}" >> $GITHUB_ENV    
           else
             echo "No merge conflicts occurred."
           fi
-      - name:  print
-        run: |
-            echo "PR_URL request : ${{ env.PR_URL }} "
-            curl -X POST -H 'Content-type: application/json' \
-            --data '{"text": "${{ env.PR_URL }} "  }' \
-             ${{ secrets.SLACK_WEBHOOK_URL }}
+      - name: Send PRs  conflicts Urls  to Slack channel
+        uses: slackapi/slack-github-action@v1.24.0
+        with:
+          # This data can be any valid JSON from a previous step in the GitHub Action
+          payload: |
+            {
+              "text": "${{ env.PR_URL }} " 
+            }
+        env:
+          SLACK_WEBHOOK_URL: ${{ secrets.SLACK_WEBHOOK_URL }}          
+
