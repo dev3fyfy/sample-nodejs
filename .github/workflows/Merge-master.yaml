@@ -47,18 +47,10 @@ jobs:
  
                 PR_URL+="$(curl -H "Authorization: Bearer ${{ secrets.PERSONAL_TOKEN }}" \
                   "https://api.github.com/repos/$GITHUB_REPOSITORY/pulls?head=master&base=$branch" \
-                  | jq -r '.[0].html_url') /n  "
+                  | jq -r '.[0].html_url') \n   "
                 echo "PR_URL=$(echo '$PR_URL') , " >> $GITHUB_ENV                   
 
-                curl -X POST -H 'Content-type: application/json' \
-                --data '{"text": "${{ env.PR_URL }} "  }' \
-                 ${{ secrets.SLACK_WEBHOOK_URL }}
-
                 
-
-                 
-                 echo "puull request : $PR_URL"
-                echo "PR_URL request : ${{ env.PR_URL }} "
 
               }
               if [ -z "$(git status --porcelain)" ]; then
