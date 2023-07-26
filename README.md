@@ -19,7 +19,7 @@ To use all the features of App Platform, you need to be running against your own
 After forking the repo, you should now be viewing this README in your own github org (e.g. `https://github.com/<your-org>/sample-nodejs`)
 
 ## Deploying the App ##
-
+aaa
 1. Visit https://cloud.digitalocean.com/apps (if you're not logged in, you may see an error message. Visit https://cloud.digitalocean.com/login directly and authenticate, then try again)
 1. Click "Launch App" or "Create App"
 1. Choose GitHub and authenticate with your GitHub credentials.
