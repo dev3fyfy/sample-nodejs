@@ -1,31 +1,52 @@
-name: Prevent Push to Master Without Staging Changes
+name: Compare Commit with Staging Branch
 on:
   pull_request:
     branches:
       - master
+
 jobs:
-  check-staging-branch:
+  compare-commit-with-staging:
     runs-on: ubuntu-latest
     steps:
-      - name: Checkout code
-        uses: actions/checkout@v2
-      - name: Get the list of changed files
-        id: changes
-        run: echo "::set-output name=files::$(git diff --name-only HEAD^ HEAD)"
-      - name: Check if changed files are on staging branch
-        id: check-staging
-        run: |
-          git fetch
-          git checkout staging
-          for file in ${{ steps.changes.outputs.files }}; do
-            if [ ! -f "$file" ]; then
-              echo "::set-output name=missing::true"
-              exit 0
-            fi
-          done
-          echo "::set-output name=missing::false"
-      - name: Fail if changes are not on staging branch
-        if: steps.check-staging.outputs.missing == 'true'
-        run: |
-          echo "Error: Changes cannot be merged to master without existing on staging branch"
-          exit 1
+    - name: Checkout code
+      uses: actions/checkout@v2
+    - name: Get commit SHA
+      id: get_commit_sha
+      run: echo "::set-output name=sha::$(git rev-parse HEAD)"
+    - name: Checkout staging branch
+      run: git checkout staging
+    - name: Compare commit with staging branch
+      run: git diff ${{ steps.get_commit_sha.outputs.sha }}
+
+
+# name: Prevent Push to Master Without Staging Changes
+# on:
+#   pull_request:
+#     branches:
+#       - master
+# jobs:
+#   check-staging-branch:
+#     runs-on: ubuntu-latest
+#     steps:
+#       - name: Checkout code
+#         uses: actions/checkout@v2
+#       - name: Get the list of changed files
+#         id: changes
+#         run: echo "::set-output name=files::$(git diff --name-only HEAD^ HEAD)"
+#       - name: Check if changed files are on staging branch
+#         id: check-staging
+#         run: |
+#           git fetch
+#           git checkout staging
+#           for file in ${{ steps.changes.outputs.files }}; do
+#             if [ ! -f "$file" ]; then
+#               echo "::set-output name=missing::true"
+#               exit 0
+#             fi
+#           done
+#           echo "::set-output name=missing::false"
+#       - name: Fail if changes are not on staging branch
+#         if: steps.check-staging.outputs.missing == 'true'
+#         run: |
+#           echo "Error: Changes cannot be merged to master without existing on staging branch"
+#           exit 1
