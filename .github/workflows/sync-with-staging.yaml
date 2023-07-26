@@ -8,45 +8,14 @@ jobs:
   compare-commit-with-staging:
     runs-on: ubuntu-latest
     steps:
+
     - name: Checkout code
       uses: actions/checkout@v2
-    - name: Get commit SHA
-      id: get_commit_sha
-      run: echo "::set-output name=sha::$(git rev-parse HEAD)"
-    - name: Checkout staging branch
-      run: git checkout staging
-    - name: Compare commit with staging branch
-      run: git diff ${{ steps.get_commit_sha.outputs.sha }}
-
-
-# name: Prevent Push to Master Without Staging Changes
-# on:
-#   pull_request:
-#     branches:
-#       - master
-# jobs:
-#   check-staging-branch:
-#     runs-on: ubuntu-latest
-#     steps:
-#       - name: Checkout code
-#         uses: actions/checkout@v2
-#       - name: Get the list of changed files
-#         id: changes
-#         run: echo "::set-output name=files::$(git diff --name-only HEAD^ HEAD)"
-#       - name: Check if changed files are on staging branch
-#         id: check-staging
-#         run: |
-#           git fetch
-#           git checkout staging
-#           for file in ${{ steps.changes.outputs.files }}; do
-#             if [ ! -f "$file" ]; then
-#               echo "::set-output name=missing::true"
-#               exit 0
-#             fi
-#           done
-#           echo "::set-output name=missing::false"
-#       - name: Fail if changes are not on staging branch
-#         if: steps.check-staging.outputs.missing == 'true'
-#         run: |
-#           echo "Error: Changes cannot be merged to master without existing on staging branch"
-#           exit 1
+    - name: Get Last Pull Request Number
+      run: echo "::set-output name=pull_request_number::$(curl -s "https://api.github.com/repos/:owner/:repo/pulls?state=all&sort=created&direction=desc&page=1&per_page=1" | jq -r '.[0].number')"
+    - name: Use Pull Request Number
+      run: echo "The last pull request number is ${{ steps.compare-commit-with-staging.outputs.pull_request_number }}."      
+    - name: Get Last Commit SHA
+      run: echo "::set-output name=last_commit_sha::$(curl -s https://api.github.com/repos/:owner/:repo/pulls/:${{ steps.get-last-pull-request-number.outputs.pull_request_number }} | jq -r '.merge_commit_sha')"
+    - name: Use Last Commit SHA
+      run: git diff ${{ steps.compare-commit-with-staging.outputs.last_commit_sha }} HEAD~
