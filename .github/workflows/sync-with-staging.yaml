@@ -14,11 +14,15 @@ jobs:
     - name: print diff
       run: |
           git fetch origin staging
-          git diff origin/staging..HEAD > mydiff
+          git diff --name-only origin/staging..HEAD > mydiff
           echo "staging = "
           cat mydiff
           git fetch origin add-app-spec
-          git diff origin/add-app-spec..HEAD > mydiff
+          git diff --name-only origin/add-app-spec..HEAD > mydiff
+          echo "same-master add-app-spec = "
+          cat mydiff
+          git fetch origin master2
+          git diff --name-only origin/master2..HEAD > mydiff
           echo "same-master add-app-spec = "
           cat mydiff
 
