@@ -15,6 +15,11 @@ jobs:
       run: |
           git fetch origin staging
           git diff origin/staging..HEAD > mydiff
-          echo "mydiff = "
+          echo "staging = "
           cat mydiff
+          git fetch origin add-app-spec
+          git diff origin/add-app-spec..HEAD > mydiff
+          echo "same-master add-app-spec = "
+          cat mydiff
+
 
