@@ -12,7 +12,7 @@ jobs:
   merge:
     runs-on: ubuntu-latest
     env:
-     BRANCHES: "main,main2,main3,add-app-spec"
+     BRANCHES: "main,main2,main3,add-app-spec,master2"
     steps:
       - name: Checkout code
         uses: actions/checkout@v2
