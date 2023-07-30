@@ -14,7 +14,7 @@ jobs:
     - name: print diff
       run: |
           git fetch origin staging
-          git diff origin/staging..HEAD > mydiff
+          git diff  --name-only origin/staging..HEAD > mydiff
           echo "mydiff = "
           cat mydiff
 
