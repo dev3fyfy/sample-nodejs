@@ -23,7 +23,7 @@ jobs:
           cat mydiff
           git fetch origin master2
           git diff --name-only origin/master2..HEAD > mydiff
-          echo "same-master add-app-spec = "
+          echo "same-master master2 = "
           cat mydiff
 
 
