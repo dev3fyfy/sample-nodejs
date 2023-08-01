@@ -24,6 +24,8 @@ jobs:
           git fetch origin master2
           git diff --name-only origin/master2..HEAD > mydiff
           echo "same-master master2 = "
+          git checkout staging
+          git merge --no-commit --no-ff --no-edit 
           cat mydiff
 
 
