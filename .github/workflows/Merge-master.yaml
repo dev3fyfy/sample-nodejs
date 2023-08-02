@@ -27,10 +27,7 @@ jobs:
           conflicts_branches=""
           pull_request_url=""
           success_braches=""
-
           echo "REPOSITORY_NAME=$GITHUB_REPOSITORY" >> $GITHUB_ENV    
-
-
           IFS=',' read -ra BRANCHES <<< "${BRANCHES}"
           for branch in "${BRANCHES[@]}"; do
             if [ "$branch" != "master" ]; then
@@ -38,10 +35,8 @@ jobs:
               git checkout "$branch"
               
               git merge --no-commit --no-ff --no-edit origin/master || {
-
                 git merge --abort
                 conflicts_branches+=("$branch")
-
                 echo "Creating pull request for $branch"
                 response=$(curl --request POST \
                   --url https://api.github.com/repos/$GITHUB_REPOSITORY/pulls \
@@ -88,82 +83,13 @@ jobs:
           fi
 
 
-      # - name: Send PRs  conflicts Urls  to Slack channel
-      #   uses: slackapi/slack-github-action@v1.24.0
-      #   with:
-      #     # This data can be any valid JSON from a previous step in the GitHub Action
-      #     payload: |
-      #       {
-      #         "text": " This release is related to ${{ env.REPOSITORY_NAME }} and includes updates that have been auto merged into multiple branches. \n\n  the updates were successfully merged into the following branches: \n${{  env.SUCCESS_BRANCHES }} \n\n there were  pull requests have been created to resolve the conflicts: \n${{ env.PR_URL }} " ,
-      #         "blocks": [
-      #           {
-      #             "type": "section",
-      #             "text": {
-      #               "type": "mrkdwn",
-      #               "text": "GitHub Action build result: <@U02F09BG9C2>"
-      #             }
-      #           }
-      #         ]
-      #       }
-      #   env:
-      #     SLACK_WEBHOOK_URL: ${{ secrets.SLACK_WEBHOOK_URL }}   
-      - name: Send Slack thread message
-        run: |
-          WEBHOOK_URL="${{ secrets.SLACK_WEBHOOK_URL }}"
-          CHANNEL="#jenkins-pipeline"
-          USERNAME="test"
-          THREAD_MESSAGE="Hello @U02F09BG9C2 @user2! This is a test message."
-          THREAD_TS=""
-          # Build the payload JSON
-
-          payload="{
-            \"channel\": \"$CHANNEL\",
-            \"username\": \"$USERNAME\",
-            \"text\": \"\",
-            \"blocks\": [
-              {
-                \"type\": \"section\",
-                \"text\": {
-                  \"type\": \"mrkdwn\",
-                  \"text\": \"$THREAD_MESSAGE\"
-                }
-              }
-            ]
-          }"
-          # Send the HTTP POST request to the webhook URL to start the thread
-          response=$( curl -X POST -H "Content-type: application/json" -H "Authorization: Bearer xoxb-2178477675508-4316586163347-qHUO2WzAo4UbuZDubIUVbmzv" --data "$payload" https://slack.com/api/chat.postMessage)
-         
-          echo "$response"
-          THREAD_TS=$(echo "$response" | jq -r '.thread_ts')
-          # Check the response
-          if [[ $THREAD_TS != "null" ]]; then
-            echo "Thread started successfully!"
-          else
-            echo "Failed to start thread. Error: $response"
-            exit 1
-          fi
-          # Build the payload JSON for the reply within the thread
-          reply_payload="{
-            \"channel\": \"$CHANNEL\",
-            \"username\": \"$USERNAME\",
-            \"text\": \"\",
-            \"thread_ts\": \"$THREAD_TS\",
-            \"blocks\": [
-              {
-                \"type\": \"section\",
-                \"text\": {
-                  \"type\": \"mrkdwn\",
-                  \"text\": \"Reply to the thread with mentions.  <@U02F09BG9C2> \"
-                }
-              }
-            ]
-          }"
-          # Send the HTTP POST request to the webhook URL to reply within the thread
-          reply_response=$(curl -s -X POST -H 'Content-type: application/json' --data "$reply_payload" "$WEBHOOK_URL")
-          # Check the reply response
-          if [[ $reply_response == "ok" ]]; then
-            echo "Reply sent successfully!"
-          else
-            echo "Failed to send reply. Error: $reply_response"
-     
-
+      - name: Send PRs  conflicts Urls  to Slack channel
+        uses: slackapi/slack-github-action@v1.24.0
+        with:
+          # This data can be any valid JSON from a previous step in the GitHub Action
+          payload: |
+            {
+              "text": " This release is related to ${{ env.REPOSITORY_NAME }} and includes updates that have been auto merged into multiple branches. \n\n  the updates were successfully merged into the following branches: \n${{  env.SUCCESS_BRANCHES }} \n\n there were  pull requests have been created to resolve the conflicts: \n${{ env.PR_URL }} " 
+            }
+        env:
+          SLACK_WEBHOOK_URL: ${{ secrets.SLACK_WEBHOOK_URL }}    
