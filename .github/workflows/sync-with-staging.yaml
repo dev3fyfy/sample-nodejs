@@ -18,14 +18,13 @@ jobs:
           echo "staging = "
           cat mydiff
           git fetch origin add-app-spec
-          git diff --name-only origin/add-app-spec..HEAD > mydiff
+          git merge --no-commit --no-ff --no-edit   origin/add-app-spec..HEAD > mydiff
           echo "same-master add-app-spec = "
           cat mydiff
           git fetch origin master2
-          git diff --name-only origin/master2..HEAD > mydiff
+          git merge --no-commit --no-ff --no-edit   origin/master2..HEAD > mydiff
           echo "same-master master2 = "
-          git checkout staging
-          git merge --no-commit --no-ff --no-edit 
+          git merge --no-commit --no-ff --no-edit  origin/master3 > mydiff
           cat mydiff
 
 
