@@ -29,6 +29,17 @@ jobs:
           git merge  origin/${{ env.BRANCH }} > mydiff
           cat mydiff
 
+          git checkout origin/master3
+          git merge origin/${{ env.BRANCH }} > mydiff
+          diff_output=$(cat mydiff)
+          
+          if [[ $diff_output == *"Already up to date."* ]]; then
+            echo "The repository is already up to date."
+          else
+            echo "Changes were found. Here is the diff:"
+            echo "$diff_output"
+          fi
+
 
 
 # git fetch origin add-app-spec
