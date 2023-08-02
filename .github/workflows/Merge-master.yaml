@@ -130,6 +130,7 @@ jobs:
             ]
           }"
           # Send the HTTP POST request to the webhook URL to start the thread
+          curl -s -X POST -H 'Content-type: application/json' --data "$payload" "$WEBHOOK_URL"
           response=$(curl -s -X POST -H 'Content-type: application/json' --data "$payload" "$WEBHOOK_URL")
           THREAD_TS=$(echo "$response" | jq -r '.thread_ts')
           # Check the response
