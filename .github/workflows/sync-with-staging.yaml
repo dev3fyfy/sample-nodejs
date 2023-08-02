@@ -17,6 +17,7 @@ jobs:
         
     - name: Set env.BRANCH
       run: |
+          echo $GITHUB_REF
           echo "BRANCH=$(echo $GITHUB_REF | sed "s/refs\/heads\///")" >> $GITHUB_ENV
 
     - name: print diff
