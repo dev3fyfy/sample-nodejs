@@ -100,7 +100,7 @@ jobs:
                   "type": "section",
                   "text": {
                     "type": "mrkdwn",
-                    "text": "GitHub Action build result: @U02F09BG9C2"
+                    "text": "GitHub Action build result: <@U02F09BG9C2>"
                   }
                 }
               ]
@@ -150,7 +150,7 @@ jobs:
                 \"type\": \"section\",
                 \"text\": {
                   \"type\": \"mrkdwn\",
-                  \"text\": \"Reply to the thread with mentions.  @U02F09BG9C2\"
+                  \"text\": \"Reply to the thread with mentions.  <@U02F09BG9C2> \"
                 }
               }
             ]
