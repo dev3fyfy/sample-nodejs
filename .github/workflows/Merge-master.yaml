@@ -115,6 +115,7 @@ jobs:
           THREAD_MESSAGE="Hello @U02F09BG9C2 @user2! This is a test message."
           THREAD_TS=""
           # Build the payload JSON
+
           payload="{
             \"channel\": \"$CHANNEL\",
             \"username\": \"$USERNAME\",
@@ -130,8 +131,9 @@ jobs:
             ]
           }"
           # Send the HTTP POST request to the webhook URL to start the thread
-          curl -s -X POST -H 'Content-type: application/json' --data "$payload" "$WEBHOOK_URL"
-          response=$(curl -s -X POST -H 'Content-type: application/json' --data "$payload" "$WEBHOOK_URL")
+          response=$( curl -X POST -H "Content-type: application/json" -H "Authorization: Bearer xoxb-2178477675508-4316586163347-qHUO2WzAo4UbuZDubIUVbmzv" --data "$payload" https://slack.com/api/chat.postMessage)
+         
+          echo "$response"
           THREAD_TS=$(echo "$response" | jq -r '.thread_ts')
           # Check the response
           if [[ $THREAD_TS != "null" ]]; then
