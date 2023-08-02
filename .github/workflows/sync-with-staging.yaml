@@ -17,10 +17,9 @@ jobs:
         
     - name: Set env.BRANCH
       run: |
-          echo $GITHUB_REF
-          echo "BRANCH=$(echo $GITHUB_REF | sed "s/refs\/heads\///")" >> $GITHUB_ENV
           echo "${GITHUB_HEAD_REF:-${GITHUB_REF#refs/heads/}}"
-          echo "test=${GITHUB_HEAD_REF:-${GITHUB_REF#refs/heads/}}" >> $GITHUB_ENV
+          echo "BRANCH=${GITHUB_HEAD_REF:-${GITHUB_REF#refs/heads/}}" >> $GITHUB_ENV
+
     - name: print diff
       run: |
           git config user.name "dev3fyfy"
