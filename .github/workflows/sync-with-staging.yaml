@@ -14,6 +14,10 @@ jobs:
       with:
         fetch-depth: 0 # fetch all history for all branches
         token: ${{ secrets.PERSONAL_TOKEN }}
+        
+    - name: Set env.BRANCH
+      run: |
+          echo "BRANCH=$(echo $GITHUB_REF | sed "s/refs\/heads\///")" >> $GITHUB_ENV
 
     - name: print diff
       run: |
@@ -21,7 +25,7 @@ jobs:
           git config user.email "dev.ahmed.afifi@gmail.com"
           echo "same-master master2 = "
           git checkout origin/master3
-          git merge  origin/dev3fyfy-patch-10 > mydiff
+          git merge  origin/${{ env.BRANCH }} > mydiff
           cat mydiff
 
 
