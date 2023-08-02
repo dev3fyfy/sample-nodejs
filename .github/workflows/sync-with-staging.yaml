@@ -21,7 +21,7 @@ jobs:
           git config user.email "dev.ahmed.afifi@gmail.com"
           echo "same-master master2 = "
           git checkout origin/master3
-          git merge  dev3fyfy-patch-10 > mydiff
+          git merge  origin/dev3fyfy-patch-10 > mydiff
           cat mydiff
 
 
