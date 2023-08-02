@@ -106,5 +106,61 @@ jobs:
               ]
             }
         env:
-          SLACK_WEBHOOK_URL: ${{ secrets.SLACK_WEBHOOK_URL }}          
+          SLACK_WEBHOOK_URL: ${{ secrets.SLACK_WEBHOOK_URL }}   
+      - name: Send Slack thread message
+        run: |
+          WEBHOOK_URL="${{ secrets.SLACK_WEBHOOK_URL }}"
+          CHANNEL="#jenkins-pipeline"
+          USERNAME="test"
+          THREAD_MESSAGE="Hello @U02F09BG9C2 @user2! This is a test message."
+          THREAD_TS=""
+          # Build the payload JSON
+          payload="{
+            \"channel\": \"$CHANNEL\",
+            \"username\": \"$USERNAME\",
+            \"text\": \"\",
+            \"blocks\": [
+              {
+                \"type\": \"section\",
+                \"text\": {
+                  \"type\": \"mrkdwn\",
+                  \"text\": \"$THREAD_MESSAGE\"
+                }
+              }
+            ]
+          }"
+          # Send the HTTP POST request to the webhook URL to start the thread
+          response=$(curl -s -X POST -H 'Content-type: application/json' --data "$payload" "$WEBHOOK_URL")
+          THREAD_TS=$(echo "$response" | jq -r '.ts')
+          # Check the response
+          if [[ $THREAD_TS != "null" ]]; then
+            echo "Thread started successfully!"
+          else
+            echo "Failed to start thread. Error: $response"
+            exit 1
+          fi
+          # Build the payload JSON for the reply within the thread
+          reply_payload="{
+            \"channel\": \"$CHANNEL\",
+            \"username\": \"$USERNAME\",
+            \"text\": \"\",
+            \"thread_ts\": \"$THREAD_TS\",
+            \"blocks\": [
+              {
+                \"type\": \"section\",
+                \"text\": {
+                  \"type\": \"mrkdwn\",
+                  \"text\": \"Reply to the thread with mentions.  @U02F09BG9C2\"
+                }
+              }
+            ]
+          }"
+          # Send the HTTP POST request to the webhook URL to reply within the thread
+          reply_response=$(curl -s -X POST -H 'Content-type: application/json' --data "$reply_payload" "$WEBHOOK_URL")
+          # Check the reply response
+          if [[ $reply_response == "ok" ]]; then
+            echo "Reply sent successfully!"
+          else
+            echo "Failed to send reply. Error: $reply_response"
+     
 
