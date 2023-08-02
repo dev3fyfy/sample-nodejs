@@ -157,6 +157,8 @@ jobs:
               }
             ]
           }"
+          echo " Build the reply_payload JSON"
+
           # Send the HTTP POST request to the webhook URL to reply within the thread
           reply_response=$(curl -s -X POST -H 'Content-type: application/json' --data "$reply_payload" "$WEBHOOK_URL")
           # Check the reply response
