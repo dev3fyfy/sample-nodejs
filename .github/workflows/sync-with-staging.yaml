@@ -20,7 +20,7 @@ jobs:
           git config user.name "dev3fyfy"
           git config user.email "dev.ahmed.afifi@gmail.com"
           echo "same-master master2 = "
-          git merge --no-commit --no-ff --no-edit --allow-unrelated-histories origin/master3 > mydiff
+          git merge  origin/master3 > mydiff
           cat mydiff
 
           git fetch origin staging
