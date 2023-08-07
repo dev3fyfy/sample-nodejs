@@ -25,8 +25,9 @@ jobs:
           git config user.name "dev3fyfy"
           git config user.email "dev.ahmed.afifi@gmail.com"
           conflicts_branches=""
-          pull_request_url=""
           success_braches=""
+          up_to_date_braches=""
+
           echo "REPOSITORY_NAME=$GITHUB_REPOSITORY" >> $GITHUB_ENV    
           IFS=',' read -ra BRANCHES <<< "${BRANCHES}"
           for branch in "${BRANCHES[@]}"; do
@@ -36,7 +37,6 @@ jobs:
               
               git merge --no-commit --no-ff --no-edit origin/master || {
                 git merge --abort
-                conflicts_branches+=("$branch")
                 echo "Creating pull request for $branch"
                 response=$(curl --request POST \
                   --url https://api.github.com/repos/$GITHUB_REPOSITORY/pulls \
@@ -50,9 +50,9 @@ jobs:
                   }')
                   
  
-                PR_URL+="• $branch : $(curl -H "Authorization: Bearer ${{ secrets.PERSONAL_TOKEN }}" \
+                conflicts_branches+=("• $branch : $(curl -H "Authorization: Bearer ${{ secrets.PERSONAL_TOKEN }}" \
                   "https://api.github.com/repos/$GITHUB_REPOSITORY/pulls?head=master&base=$branch" \
-                  | jq -r '.[0].html_url') \n"
+                  | jq -r '.[0].html_url') \n")
 
                 
 
@@ -60,6 +60,8 @@ jobs:
 
               if [ -z "$(git status --porcelain)" ]; then
                 git push origin "$branch"
+                up_to_date_braches+="• $branch /n"
+
                 echo "already up to date success" 
               else
                 git commit -am "Merge branch 'master' into $branch"
@@ -72,6 +74,14 @@ jobs:
             fi
 
           done
+  
+          if [ -n "${up_to_date_braches}" ]; then
+            echo "UP_TO_DATE_BRANCHES=$(echo "already up to date success branches : ${up_to_date_braches}")" >> $GITHUB_ENV
+          else
+            echo "No UP_TO_DATE_BRANCHES"
+
+          fi
+
           if [ -n "${success_braches}" ]; then
             echo "SUCCESS_BRANCHES=$(echo "the updates were successfully merged into the following branches: ${success_branches}")" >> $GITHUB_ENV
           else
@@ -83,11 +93,13 @@ jobs:
 
           if [ ${#conflicts_branches[@]} -gt 0 ]; then
             echo "Merge conflicts occurred in the following branches: ${conflicts_branches[@]} \n ${PR_URL[@]}"
-            echo "PR_URL=${PR_URL}" >> $GITHUB_ENV    
+            echo "PR_URL=$(echo "Merge conflicts occurred in the following branches: ${conflicts_branches[@]}")" >> $GITHUB_ENV    
           else
             echo "No merge conflicts occurred."
 
           fi
+
+
 
 
       - name: Send PRs  conflicts Urls  to Slack channel
@@ -96,6 +108,6 @@ jobs:
           # This data can be any valid JSON from a previous step in the GitHub Action
           payload: |
             {
-              "text": " <@U02F09BG9C2>  This release is related to ${{ env.REPOSITORY_NAME }} and includes updates that have been auto merged into multiple branches. \n ${{  env.SUCCESS_BRANCHES }} \n  ${{  env.PR_URL }} "             }
+              "text": " <@U02F09BG9C2>  This release is related to ${{ env.REPOSITORY_NAME }} and includes updates that have been auto merged into multiple branches. \n ${{  env.SUCCESS_BRANCHES }} \n  ${{  env.PR_URL }} "    \n  ${{  env.UP_TO_DATE_BRANCHES }}        }
         env:
           SLACK_WEBHOOK_URL: ${{ secrets.SLACK_WEBHOOK_URL }}    
