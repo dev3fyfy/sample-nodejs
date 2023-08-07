@@ -73,18 +73,14 @@ jobs:
           done
           if [ !  -z ${success_braches} ]; then
             echo "SUCCESS_BRANCHES=$(echo \"the updates were successfully merged into the following branches: ${success_branches}\")" >> $GITHUB_ENV
-          else
 
-          fi
 
               
 
           if [ ${#conflicts_branches[@]} -gt 0 ]; then
 
             echo "PR_URL=$(echo \"there were  pull requests have been created to resolve the conflicts: \n${PR_URL} \")">> $GITHUB_ENV    
-          else
 
-          fi
 
 
 
