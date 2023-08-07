@@ -71,8 +71,9 @@ jobs:
             fi
 
           done
-          if [ !  -z ${success_braches} ]; then
+          if [ -n "${success_braches}" ]; then
             echo "SUCCESS_BRANCHES=$(echo "the updates were successfully merged into the following branches: ${success_branches}")" >> $GITHUB_ENV
+
 
 
 
