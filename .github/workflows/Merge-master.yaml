@@ -71,6 +71,7 @@ jobs:
             fi
 
           done
+            echo "SUCCESS_BRANCHES=$(echo "${success_branches}")" >> $GITHUB_ENV
 
 
           if [ ${#conflicts_branches[@]} -gt 0 ]; then
