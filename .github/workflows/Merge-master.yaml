@@ -56,7 +56,7 @@ jobs:
 
                 
 
-              }
+               }
 
               if [ -z "$(git status --porcelain)" ]; then
                 git push origin "$branch"
