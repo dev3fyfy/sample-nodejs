@@ -27,7 +27,6 @@ jobs:
           conflicts_branches=""
           success_braches=""
           up_to_date_braches=""
-
           echo "REPOSITORY_NAME=$GITHUB_REPOSITORY" >> $GITHUB_ENV    
           IFS=',' read -ra BRANCHES <<< "${BRANCHES}"
           for branch in "${BRANCHES[@]}"; do
@@ -108,7 +107,7 @@ jobs:
           # This data can be any valid JSON from a previous step in the GitHub Action
           payload: |
             {
-              "text": " <@U02F09BG9C2>  This release is related to ${{ env.REPOSITORY_NAME }} and includes updates that have been auto merged into multiple branches. \n ${{  env.SUCCESS_BRANCHES }} \n  ${{  env.PR_URL }} "    \n  ${{  env.UP_TO_DATE_BRANCHES }}        
+              "text": " <@U02F09BG9C2>  This release is related to ${{ env.REPOSITORY_NAME }} and includes updates that have been auto merged into multiple branches. \n ${{  env.SUCCESS_BRANCHES }} \n  ${{  env.PR_URL }}     \n  ${{  env.UP_TO_DATE_BRANCHES }}   "     
             }
         env:
-          SLACK_WEBHOOK_URL: ${{ secrets.SLACK_WEBHOOK_URL }}    
+          SLACK_WEBHOOK_URL: ${{ secrets.SLACK_WEBHOOK_URL }}    9
