@@ -11,21 +11,34 @@ jobs:
 
     - name: Checkout code
       uses: actions/checkout@v2
+      with:
+        fetch-depth: 0 # fetch all history for all branches
+        token: ${{ secrets.PERSONAL_TOKEN }}
+        
+    - name: Set env.BRANCH
+      run: |
+          echo "${GITHUB_HEAD_REF:-${GITHUB_REF#refs/heads/}}"
+          echo "BRANCH=${GITHUB_HEAD_REF:-${GITHUB_REF#refs/heads/}}" >> $GITHUB_ENV
+
     - name: print diff
       run: |
-          git fetch origin staging
-          git diff --name-only origin/staging..HEAD > mydiff
-          echo "staging = "
-          cat mydiff
-          git fetch origin add-app-spec
-          git diff --name-only origin/add-app-spec..HEAD > mydiff
-          echo "same-master add-app-spec = "
-          cat mydiff
-          git fetch origin master2
-          git diff --name-only origin/master2..HEAD > mydiff
+          git config user.name "dev3fyfy"
+          git config user.email "dev.ahmed.afifi@gmail.com"
           echo "same-master master2 = "
+<<<<<<< HEAD
 
           git merge --no-commit --no-ff --no-edit origin/staging
+=======
+          git checkout origin/master3
+          git merge  origin/${{ env.BRANCH }} > mydiff
+>>>>>>> origin/master
           cat mydiff
 
 
+
+# git fetch origin add-app-spec
+# git merge --no-commit --no-ff --no-edit  --allow-unrelated-histories  origin/add-app-spec > mydiff
+# echo "same-master add-app-spec = "
+# cat mydiff
+# git fetch origin master2
+# git merge --no-commit --no-ff --no-edit  --allow-unrelated-histories  origin/master2 > mydiff
