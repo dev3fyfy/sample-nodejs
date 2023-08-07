@@ -51,7 +51,8 @@ jobs:
                   
  
                 PR_URL+="$branch : $(curl -H "Authorization: Bearer ${{ secrets.PERSONAL_TOKEN }}" \
-                  "https://api.github.com/repos/$GITHUB_REPOSITORY/pulls?head=master&base=$branch" \ | jq -r '.[0].html_url') \n"
+                  "https://api.github.com/repos/$GITHUB_REPOSITORY/pulls?head=master&base=$branch" \ 
+                  | jq -r '.[0].html_url') \n"
 
                 
 
