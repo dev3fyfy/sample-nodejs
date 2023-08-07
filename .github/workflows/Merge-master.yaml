@@ -53,7 +53,7 @@ jobs:
 
               }
               
-              if [ -n "$(git status )" ]; then
+              if [[ -z $(git status ) ]]; then
                 echo "up_to_date_braches $branch "
                 up_to_date_braches+= "• $branch "
 
