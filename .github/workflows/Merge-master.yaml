@@ -68,7 +68,7 @@ jobs:
 
               fi
 
-            fi
+           
 
           done
           if [ !  -z ${success_braches} ]; then
