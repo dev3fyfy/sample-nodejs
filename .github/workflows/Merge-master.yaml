@@ -53,7 +53,8 @@ jobs:
 
               }
               
-              if [ -z "$(git status )" ]; then
+              if [[ -z $(git status ) ]]; then
+                echo "up_to_date_braches $branch "
                 up_to_date_braches+= "• $branch "
 
               fi
@@ -76,14 +77,14 @@ jobs:
             echo "SUCCESS_BRANCHES=${success_merge_braches}" >> $GITHUB_ENV    
 
           if [ -n "${up_to_date_braches}" ]; then
-            echo "UP_TO_DATE_BRANCHES=$(echo "already up to date success branches : ${up_to_date_braches}")" >> $GITHUB_ENV
+            echo "UP_TO_DATE_BRANCHES=$(echo "already up to date success branches : \n ${up_to_date_braches}")" >> $GITHUB_ENV
 
           fi 
 
 
           if [ -n "${success_merge_braches}" ]; then
 
-            echo "SUCCESS_BRANCHES=$(echo "the updates were successfully merged into the following branches: ${success_merge_braches}")" >> $GITHUB_ENV
+            echo "SUCCESS_BRANCHES=$(echo "the updates were successfully merged into the following branches: \n ${success_merge_braches}")" >> $GITHUB_ENV
 
           fi
 
@@ -91,7 +92,7 @@ jobs:
           if [ ${#conflicts_branches[@]} -gt 0 ]; then
             echo "Merge conflicts occurred in the following branches: ${conflicts_branches[@]} \n ${PR_URL[@]}"
             echo "PR_URL=${PR_URL}" >> $GITHUB_ENV    
-            echo "PR_URL=$(echo "Merge conflicts occurred in the following branches: ${PR_URL}")" >> $GITHUB_ENV    
+            echo "PR_URL=$(echo "Merge conflicts occurred in the following branches: \n ${PR_URL}")" >> $GITHUB_ENV    
 
           else
             echo "No merge conflicts occurred."
