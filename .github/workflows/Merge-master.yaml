@@ -1,3 +1,5 @@
+name: Merge master into all branches
+
 on:
   push:
     branches:
@@ -7,7 +9,7 @@ jobs:
   merge:
     runs-on: ubuntu-latest
     env:
-      BRANCHES: "staging,fintech-qa,fintech-dev"
+     BRANCHES: "main,main2,main3,add-app-spec,master2,staging"
     steps:
       - name: Checkout code
         uses: actions/checkout@v2
