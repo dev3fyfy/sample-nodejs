@@ -1,0 +1,115 @@
+name: Merge master into all branches
+
+on:
+  push:
+    branches:
+      - master
+
+jobs:
+  merge:
+    runs-on: ubuntu-latest
+    env:
+     BRANCHES: "main,main2,main3,add-app-spec,master2,staging"
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v2
+        with:
+          fetch-depth: 0 # fetch all history for all branches
+          token: ${{ secrets.PERSONAL_TOKEN }}
+
+      - name: Merge changes into other branches
+        run: |
+          git config user.name "dev3fyfy"
+          git config user.email "dev.ahmed.afifi@gmail.com"
+          conflicts_branches=""
+          success_merge_braches=""
+          up_to_date_status=""
+          echo "REPOSITORY_NAME=$GITHUB_REPOSITORY" >> $GITHUB_ENV    
+          IFS=',' read -ra BRANCHES <<< "${BRANCHES}"
+          for branch in "${BRANCHES[@]}"; do
+            if [ "$branch" != "master" ]; then
+            
+              git checkout "$branch"
+              
+              git merge --no-commit --no-ff --no-edit origin/master || {
+                git merge --abort
+                conflicts_branches+=("$branch")
+                echo "Creating pull request for $branch"
+                response=$(curl --request POST \
+                  --url https://api.github.com/repos/$GITHUB_REPOSITORY/pulls \
+                  --header 'authorization: Bearer ${{ secrets.PAT_AUTOMERGE }}' \
+                  --header 'content-type: application/json' \
+                  --data '{
+                    "title": "Merge master into '"$branch"' (auto) '${GITHUB_SHA::8}'",
+                    "body": "There were merge conflicts when attempting to merge changes from  into this branch. Please resolve the conflicts and merge the changes manually.",
+                    "head": "master",
+                    "base": "'"$branch"'"
+                  }')
+                  
+ 
+                PR_URL+="• $branch : $(curl -H "Authorization: Bearer ${{ secrets.PERSONAL_TOKEN }}" \
+                  "https://api.github.com/repos/$GITHUB_REPOSITORY/pulls?head=master&base=$branch" \  | jq -r '.[0].html_url') \n"
+
+                
+
+              }
+               up_to_date_status="$(git status)"
+               echo "status up_to_date_status:  ${up_to_date_status}"
+               echo "$( git merge --no-commit --no-ff --no-edit origin/master)"
+              if [ ! -n "${up_to_date_status}" ]; then
+                echo "up_to_date_braches $branch "
+                up_to_date_braches+= "• $branch "
+
+              fi
+
+              if [ -z "$(git status --porcelain)" ]; then
+                git push origin "$branch"
+                echo "already up-to-date success" 
+              else
+                git commit -am "Merge branch 'master' into $branch"
+                git push origin "$branch"
+                commit_id=$(git log --oneline)
+                success_merge_braches+="• $branch : ${commit_id::8} \n"
+
+              fi
+
+            fi
+
+          done
+
+            echo "SUCCESS_BRANCHES=${success_merge_braches}" >> $GITHUB_ENV    
+
+          if [ -n "${up_to_date_braches}" ]; then
+            echo "UP_TO_DATE_BRANCHES=$(echo "already up to date success branches : \n ${up_to_date_braches}")" >> $GITHUB_ENV
+
+          fi 
+
+
+          if [ -n "${success_merge_braches}" ]; then
+
+            echo "SUCCESS_BRANCHES=$(echo "the updates were successfully merged into the following branches: \n ${success_merge_braches}")" >> $GITHUB_ENV
+
+          fi
+
+
+          if [ ${#conflicts_branches[@]} -gt 0 ]; then
+            echo "Merge conflicts occurred in the following branches: ${conflicts_branches[@]} \n ${PR_URL[@]}"
+            echo "PR_URL=${PR_URL}" >> $GITHUB_ENV    
+            echo "PR_URL=$(echo "Merge conflicts occurred in the following branches: \n ${PR_URL}")" >> $GITHUB_ENV    
+
+          else
+            echo "No merge conflicts occurred."
+
+          fi
+
+
+      - name: Send PRs  conflicts Urls  to Slack channel
+        uses: slackapi/slack-github-action@v1.24.0
+        with:
+          # This data can be any valid JSON from a previous step in the GitHub Action
+          payload: |
+            {
+              "text": " This release is related to  ${{ env.REPOSITORY_NAME }} and includes updates that have been auto merged into multiple branches. \n${{  env.UP_TO_DATE_BRANCHES }}\n${{  env.SUCCESS_BRANCHES }} \n\n${{ env.PR_URL }} " 
+            }
+        env:
+          SLACK_WEBHOOK_URL: ${{ secrets.SLACK_WEBHOOK_URL }} 

@@ -1,5 +1,6 @@
 ## Getting Started
 
+<<<<<<< HEAD
 We provide a sample app using Node.js that you can deploy on App Platform. These steps will get this sample application running for you using App Platform.
 
 **Note: Following these steps may result in charges for the use of DigitalOcean services.**
@@ -7,6 +8,28 @@ We provide a sample app using Node.js that you can deploy on App Platform. These
 ### Requirements
 
 * You need a DigitalOcean account. If you don't already have one, you can sign up at https://cloud.digitalocean.com/registrations/new.
+=======
+These steps will get this sample application running for you using DigitalOcean.
+pr test1 test1
+**Note: Following these steps will result in charges for the use of DigitalOcean services**
+test1
+test2
+aa
+## Requirements
+* You need a DigitalOcean account. If you don't already have one, you can sign up at https://cloud.digitalocean.com/registrations/new
+* You need a DigitalOcean account. If you don't already have one, you can sign up at https://cloud.digitalocean.com/registrations/new
+
+* You need a DigitalOcean account. If you don't already have one, you can sign up at https://cloud.digitalocean.com/registrations/new
+
+Test3Test3
+    Test3Test3
+    aaaaa
+
+    
+## Forking the Sample App Source Code
+## Forking the Sample App Source Code
+## Forking the Sample App Source Code
+>>>>>>> origin/master
 
 ## Deploying the App
 
