@@ -50,7 +50,7 @@ jobs:
                   }')
                   
  
-                PR_URL+="$branch : $(curl -H "Authorization: Bearer ${{ secrets.PERSONAL_TOKEN }}" \
+                PR_URL+="• $branch : $(curl -H "Authorization: Bearer ${{ secrets.PERSONAL_TOKEN }}" \
                   "https://api.github.com/repos/$GITHUB_REPOSITORY/pulls?head=master&base=$branch" \
                   | jq -r '.[0].html_url') \n"
 
@@ -64,23 +64,30 @@ jobs:
                 git commit -am "Merge branch 'master' into $branch"
                 git push origin "$branch"
                 commit_id=$(git log --oneline)
-                success_braches+="$branch : ${commit_id::8} /n"
+                success_braches+="• $branch : ${commit_id::8} /n"
 
               fi
 
             fi
 
           done
-
-            echo "SUCCESS_BRANCHES=${success_braches}" >> $GITHUB_ENV    
-
-          if [ ${#conflicts_branches[@]} -gt 0 ]; then
-            echo "Merge conflicts occurred in the following branches: ${conflicts_branches[@]} \n ${PR_URL[@]}"
-            echo "PR_URL=${PR_URL}" >> $GITHUB_ENV    
+          if [ !  -z ${success_braches} ]; then
+            echo "SUCCESS_BRANCHES=$(echo \"the updates were successfully merged into the following branches: ${success_branches}\")" >> $GITHUB_ENV
           else
-            echo "No merge conflicts occurred."
+            echo "SUCCESS_BRANCHES=\"\")" >> $GITHUB_ENV
 
           fi
+
+              
+
+          if [ ${#conflicts_branches[@]} -gt 0 ]; then
+
+            echo "PR_URL=$(echo \"there were  pull requests have been created to resolve the conflicts: \n${PR_URL} \")">> $GITHUB_ENV    
+          else
+            echo "PR_URL=\"\")" >> $GITHUB_ENV
+
+          fi
+
 
 
       - name: Send PRs  conflicts Urls  to Slack channel
@@ -89,7 +96,7 @@ jobs:
           # This data can be any valid JSON from a previous step in the GitHub Action
           payload: |
             {
-              "text": " <@U02F09BG9C2>  This release is related to ${{ env.REPOSITORY_NAME }} and includes updates that have been auto merged into multiple branches. \n\n  the updates were successfully merged into the following branches: \n${{  env.SUCCESS_BRANCHES }} \n\n there were  pull requests have been created to resolve the conflicts: \n${{ env.PR_URL }} " 
+              "text": " <@U02F09BG9C2>  This release is related to ${{ env.REPOSITORY_NAME }} and includes updates that have been auto merged into multiple branches. \n ${{  env.SUCCESS_BRANCHES }} \n  ${{  env.PR_URL }} " 
             }
         env:
           SLACK_WEBHOOK_URL: ${{ secrets.SLACK_WEBHOOK_URL }}    
