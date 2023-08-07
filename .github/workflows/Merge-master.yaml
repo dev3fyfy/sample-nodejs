@@ -55,7 +55,9 @@ jobs:
               }
                up_to_date_status="$(git status)"
                echo "status up_to_date_status:  ${up_to_date_status}"
-               echo "git merge  origin/master : $( git merge  origin/master)"
+               echo "start git merge  origin/master : $( git merge  origin/master)"
+               echo "end git merge  origin/master "
+
               if [ ! -n "${up_to_date_status}" ]; then
                 echo "up_to_date_braches $branch "
                 up_to_date_braches+= "• $branch "
