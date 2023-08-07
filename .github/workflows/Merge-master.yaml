@@ -23,6 +23,7 @@ jobs:
           git config user.email "dev.ahmed.afifi@gmail.com"
           conflicts_branches=""
           success_merge_braches=""
+          up_to_date_status=""
           echo "REPOSITORY_NAME=$GITHUB_REPOSITORY" >> $GITHUB_ENV    
           IFS=',' read -ra BRANCHES <<< "${BRANCHES}"
           for branch in "${BRANCHES[@]}"; do
@@ -52,8 +53,8 @@ jobs:
                 
 
               }
-              
-              if [[ -z $(git status ) ]]; then
+              up_to_date_status=$(git status)
+              if [ -n "${up_to_date_status}" ]; then
                 echo "up_to_date_braches $branch "
                 up_to_date_braches+= "• $branch "
 
