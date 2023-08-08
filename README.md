@@ -61,6 +61,7 @@ If you followed the steps to fork the repo and used your own copy when deploying
 
 Here's an example code change you can make for this app:
 
+<<<<<<< HEAD
 1. Edit code within the repository
 1. Commit the change to the `main` branch. Normally it's a better practice to create a new branch for your change and then merge that branch to `main` after review, but for this demo you can commit to the `main` branch directly.
 1. Visit https://cloud.digitalocean.com/apps and navigate to your sample app.
@@ -68,6 +69,11 @@ Here's an example code change you can make for this app:
 1. Once the build completes successfully, click the **Live App** link in the header and you should see your updated application running. You may need to force refresh the page in your browser (e.g. using **Shift+Reload**).
 
 ### Learn More
+=======
+## Learn More ##
+## Learn More ##
+You can learn more about the App Platform and how to manage and update your application at https://www.digitalocean.com/docs/apps/.
+>>>>>>> origin/master
 
 You can learn more about the App Platform and how to manage and update your application at https://www.digitalocean.com/docs/app-platform/.
 
