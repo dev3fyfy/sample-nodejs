@@ -54,6 +54,8 @@ Here's an example code change you can make for this app:
 
 ## Learn More ##
 ## Learn More ##
+## Learn More ##
+
 You can learn more about the App Platform and how to manage and update your application at https://www.digitalocean.com/docs/apps/.
 
 
