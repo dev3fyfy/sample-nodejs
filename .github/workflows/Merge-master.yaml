@@ -23,25 +23,16 @@ jobs:
           git config user.email "dev.ahmed.afifi@gmail.com"
           conflicts_branches=""
           success_merge_braches=""
-          up_to_date_status=""
-          up_to_date_braches=""
+
           echo "REPOSITORY_NAME=$GITHUB_REPOSITORY" >> $GITHUB_ENV    
+
           IFS=',' read -ra BRANCHES <<< "${BRANCHES}"
           for branch in "${BRANCHES[@]}"; do
             if [ "$branch" != "master" ]; then
             
               git checkout "$branch"
 
-               up_to_date_status="$(git status)"
-               echo "status up_to_date_status:  ${up_to_date_status}"
-               echo "start git merge  origin/master : $( git merge  origin/master)"
-               echo "end git merge  origin/master "
 
-              if [ ! -n "${up_to_date_status}" ]; then
-                echo "up_to_date_braches $branch "
-                up_to_date_braches+= "• $branch "
-
-              fi    
 
           
               git merge --no-commit --no-ff --no-edit origin/master || {
@@ -85,15 +76,12 @@ jobs:
 
             echo "SUCCESS_BRANCHES=${success_merge_braches}" >> $GITHUB_ENV    
 
-          if [ -n "${up_to_date_braches}" ]; then
-            echo "UP_TO_DATE_BRANCHES=$(echo "already up to date success branches : \n ${up_to_date_braches}")" >> $GITHUB_ENV
 
-          fi 
 
 
           if [ -n "${success_merge_braches}" ]; then
 
-            echo "SUCCESS_BRANCHES=$(echo "the updates were successfully merged into the following branches: \n ${success_merge_braches}")" >> $GITHUB_ENV
+            echo "SUCCESS_BRANCHES=$(echo "The updates were successfully merged into the following branches: \n ${success_merge_braches}")" >> $GITHUB_ENV
 
           fi
 
@@ -115,7 +103,7 @@ jobs:
           # This data can be any valid JSON from a previous step in the GitHub Action
           payload: |
             {
-              "text": " This release is related to  ${{ env.REPOSITORY_NAME }} and includes updates that have been auto merged into multiple branches. \n${{  env.UP_TO_DATE_BRANCHES }}\n${{  env.SUCCESS_BRANCHES }} \n\n${{ env.PR_URL }} " 
+              "text": " This release is associated with the repository   ${{ env.REPOSITORY_NAME }} and includes updates that have been automatically merged into multiple branches by ${{ env.GITHUB_ACTOR }}. \n${{  env.UP_TO_DATE_BRANCHES }}\n${{  env.SUCCESS_BRANCHES }} \n\n${{ env.PR_URL }} " 
             }
         env:
           SLACK_WEBHOOK_URL: ${{ secrets.SLACK_WEBHOOK_URL }} 
