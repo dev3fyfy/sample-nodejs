@@ -88,8 +88,9 @@ jobs:
 
           if [ ${#conflicts_branches[@]} -gt 0 ]; then
             echo "Merge conflicts occurred in the following branches: ${conflicts_branches[@]} \n ${PR_URL[@]}"
-            echo "PR_URL=${PR_URL}" >> $GITHUB_ENV    
-            echo "PR_URL=$(echo "Merge conflicts occurred in the following branches: \n ${PR_URL}")" >> $GITHUB_ENV    
+            if [ -n "${PR_URL}" ]; then
+            echo "PR_URL=$(echo "Merge conflicts occurred in the following branches: \n ${PR_URL}")" >> $GITHUB_ENV  
+            fi
 
           else
             echo "No merge conflicts occurred."
@@ -103,7 +104,7 @@ jobs:
           # This data can be any valid JSON from a previous step in the GitHub Action
           payload: |
             {
-              "text": " This release is associated with the repository   ${{ env.REPOSITORY_NAME }} and includes updates that have been automatically merged into multiple branches by ${{ env.GITHUB_ACTOR }}. \n${{  env.UP_TO_DATE_BRANCHES }}\n${{  env.SUCCESS_BRANCHES }} \n\n${{ env.PR_URL }} " 
+              "text": " This release is associated with the repository   ${{ env.REPOSITORY_NAME }} and includes updates that have been automatically merged into multiple branches by ${ GITHUB_ACTOR }. \n${{  env.UP_TO_DATE_BRANCHES }}\n${{  env.SUCCESS_BRANCHES }} \n\n${{ env.PR_URL }} " 
             }
         env:
           SLACK_WEBHOOK_URL: ${{ secrets.SLACK_WEBHOOK_URL }} 
