@@ -104,7 +104,7 @@ jobs:
           # This data can be any valid JSON from a previous step in the GitHub Action
           payload: |
             {
-              "text": " This release is associated with the repository   ${{ env.REPOSITORY_NAME }} and includes updates that have been automatically merged into multiple branches by ${ GITHUB_ACTOR }. \n${{  env.UP_TO_DATE_BRANCHES }}\n${{  env.SUCCESS_BRANCHES }} \n\n${{ env.PR_URL }} " 
+              "text": " This release is associated with the repository   ${{ env.REPOSITORY_NAME }} and includes updates that have been automatically merged into multiple branches by $GITHUB_ACTOR. \n${{  env.UP_TO_DATE_BRANCHES }}\n${{  env.SUCCESS_BRANCHES }} \n\n${{ env.PR_URL }} " 
             }
         env:
           SLACK_WEBHOOK_URL: ${{ secrets.SLACK_WEBHOOK_URL }} 
