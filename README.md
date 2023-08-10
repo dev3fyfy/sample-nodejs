@@ -86,6 +86,11 @@ Here's an example code change you can make for this app:
 You can learn more about the App Platform and how to manage and update your application at https://www.digitalocean.com/docs/apps/.
 
 
+## Deleting the App ### Learn More ##
+## Learn More ##
+You can learn more about the App Platform and how to manage and update your application at https://www.digitalocean.com/docs/apps/.
+
+
 ## Deleting the App #
 
 When you no longer need this sample application running live, you can delete it by following these steps:
