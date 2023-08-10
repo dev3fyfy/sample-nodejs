@@ -36,6 +36,22 @@ Test3Test3
     aaaaa
     aaaaa
     aaaaa
+* You need a DigitalOcean account. If you don't already have one, you can sign up at https://cloud.digitalocean.com/registrations/new
+
+Test3Test3Test3Test3
+    Test3Test3
+
+Test3Test3
+    aaaaa
+    aaaaa
+    aaaaa
+st3Test3Test3
+    Test3Test3
+
+Test3Test3
+    aaaaa
+    aaaaa
+    aaaaa
 
 >>>>>>> origin/master
     
