@@ -36,10 +36,7 @@ jobs:
                echo "------------------end git merge  origin/master "
 
 
-              if [ ! -n "${up_to_date_status}" ]; then
-                echo "up_to_date_braches $branch "
-                up_to_date_braches+= "• $branch "
-              fi    
+   
           
               git merge --no-commit --no-ff --no-edit origin/master || {
                 git merge --abort
