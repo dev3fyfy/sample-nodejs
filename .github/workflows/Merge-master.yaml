@@ -39,9 +39,8 @@ jobs:
                echo "--------------start git merge  origin/master : $( git merge  origin/master)"
                echo "------------------end git merge  origin/master "
                 merge_output=$(cat <<EOF 
-                       $(git merge --no-commit --no-ff --no-edit origin/master 2>&1)
-                       EOF
-                       )
+                  $(git merge --no-commit --no-ff --no-edit origin/master 2>&1)
+                  EOF )
                 echo "$merge_output"
                 if [[ $merge_output == *"fatal: Exiting because of an unresolved conflict."* ]]; then
                   conflicts_branches+=" $branch"
