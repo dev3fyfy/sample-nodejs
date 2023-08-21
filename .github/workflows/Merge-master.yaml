@@ -33,8 +33,8 @@ jobs:
               git checkout "$branch"
                echo "--------------start git merge  origin/master : $( git merge  origin/master)"
                echo "------------------end git merge  origin/master "
-              # merge_output=$( git merge  origin/master) || { $(echo "Auto-merging") }
-              # echo "$merge_output"
+              merge_output=$( git merge  origin/master) || { $(echo "Auto-merging") }
+              echo "$merge_output"
               
               #   if [[ $merge_output != *"Auto-merging"* ]]; then
               #     up_to_date_braches+=" $branch"
