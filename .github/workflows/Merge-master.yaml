@@ -36,8 +36,7 @@ jobs:
             if [ "$branch" != "master" ]; then
             
               git checkout "$branch"
-               echo "--------------start git merge  origin/master : $( git merge  origin/master)"
-               echo "------------------end git merge  origin/master "
+
                  git merge  origin/master >> merge_output
                 echo "merge_output"
                 cat merge_output
