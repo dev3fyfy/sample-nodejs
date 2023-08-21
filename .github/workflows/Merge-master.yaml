@@ -1,8 +1,3 @@
-
-
-
-
-
 name: Merge master into all branches
 
 on:
@@ -36,14 +31,14 @@ jobs:
             if [ "$branch" != "master" ]; then
             
               git checkout "$branch"
-
-                git merge  origin/master 
-
-
+               echo "--------------start git merge  origin/master : $( git merge  origin/master)"
+               echo "------------------end git merge  origin/master "
+              merge_output=$( git merge  origin/master) || { $(echo "Auto-merging") }
+              echo "$merge_output"
               
-
-
-
+              if [[ $merge_output != *"Auto-merging"* ]]; then
+                up_to_date_braches+=" $branch"
+              fi
           echo "Up-to-date branches: $up_to_date_braches"
           
               git merge --no-commit --no-ff --no-edit origin/master || {
