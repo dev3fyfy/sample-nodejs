@@ -21,12 +21,16 @@ jobs:
       - name: Sync branches
         run: |
           git fetch origin
-          git branch -r --merged origin/master 
           git branch -r --merged origin/master | grep -v 'origin/master$' | cut -d '/' -f 2- > merged_branches.txt
-          git branch -r --no-merged origin/master
           git branch -r --no-merged origin/master | grep -v 'origin/master$' | cut -d '/' -f 2- > conflict_branches.txt
-          git branch -r --contains origin/master
           git branch -r --contains origin/master | grep -v 'origin/master$' | cut -d '/' -f 2- > up_to_date_branches.txt
+          
+          while read -r branch; do
+            git checkout "${branch}"
+            git merge --no-commit --no-ff --no-edit origin/master
+            git commit -m "Merge changes from master"
+            git push origin "${branch}"
+          done < up_to_date_branches.txt
           
       - name: Read merged branches
         id: read-merged
