@@ -30,10 +30,10 @@ jobs:
           for branch in "${BRANCHES[@]}"; do
             if [ "$branch" != "master" ]; then
               echo "--------------start git merge  origin/master : "
-              git checkout master
-              git reset --hard $branch
+               git checkout "$branch"
+               git reset --hard $branch
               echo "------------------end git merge  origin/master "
-              git checkout "$branch"
+             
 
               merge_output=$( git merge  origin/master ||   echo "Auto-merging"  ) 
               echo "merge_output : $merge_output"
