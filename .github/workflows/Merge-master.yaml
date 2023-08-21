@@ -31,13 +31,15 @@ jobs:
             if [ "$branch" != "master" ]; then
             
               git checkout "$branch"
-               echo "--------------start git merge  origin/master : 
-               echo "------------------end git merge  origin/master "
+
               merge_output=$( git merge  origin/master ||   echo "Auto-merging"  ) 
               echo "$merge_output"
               
                 if [[ $merge_output != *"Auto-merging"* ]]; then
+                  echo "--------------start git merge  origin/master : "
+
                   up_to_date_braches+=" $branch"
+                  echo "------------------end git merge  origin/master "
                 fi
               echo "Up-to-date branches: $up_to_date_braches"
           
