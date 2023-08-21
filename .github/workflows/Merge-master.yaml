@@ -9,7 +9,7 @@ jobs:
   merge:
     runs-on: ubuntu-latest
     env:
-     BRANCHES: "add-app-spec,master2,staging"
+     BRANCHES: "add-app-spec,master2,staging,main2,main3,master3"
     steps:
       - name: Checkout code
         uses: actions/checkout@v2
@@ -33,7 +33,7 @@ jobs:
               git checkout "$branch"
 
               merge_output=$( git merge  origin/master ||   echo "Auto-merging"  ) 
-              echo "$merge_output"
+              echo "merge_output : $merge_output"
               
                 if [[ $merge_output != *"Auto-merging"* ]]; then
                   echo "--------------start git merge  origin/master : "
