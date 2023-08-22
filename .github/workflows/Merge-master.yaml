@@ -29,24 +29,12 @@ jobs:
           IFS=',' read -ra BRANCHES <<< "${BRANCHES}"
           for branch in "${BRANCHES[@]}"; do
             if [ "$branch" != "master" ]; then
-              echo "--------------start git merge  origin/master : "
+
                git checkout "$branch"
-               git reset --hard $branch
-              echo "------------------end git merge  origin/master "
              
 
-              merge_output=$( git merge  origin/master ||   echo "Auto-merging"  ) 
-              echo "merge_output : $merge_output"
-              
-                if [[ $merge_output != *"Auto-merging"* ]]; then
-                  
-
-                  up_to_date_braches+=" $branch"
-                  
-                fi
-              echo "Up-to-date branches: $up_to_date_braches"
           
-              git merge --no-commit --no-ff --no-edit origin/master || {
+              merge_output=$(git merge --no-commit --no-ff --no-edit origin/master || {
                 git merge --abort
                 conflicts_branches+=("$branch")
                 echo "Creating pull request for $branch"
@@ -67,7 +55,14 @@ jobs:
 
                 
 
-              }
+              })
+
+                if [[ $merge_output != *"Already up to date."* ]]; then
+                  
+
+                  up_to_date_braches+=" $branch"
+                  
+                fi
 
 
               if [ -z "$(git status --porcelain)" ]; then
