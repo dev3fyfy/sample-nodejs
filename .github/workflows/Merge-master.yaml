@@ -57,7 +57,7 @@ jobs:
 
               })
 
-                if [[ $merge_output != *"Already up to date."* ]]; then
+                if [[ $merge_output == *"Already up to date."* ]]; then
                   
 
                   up_to_date_braches+=" $branch"
