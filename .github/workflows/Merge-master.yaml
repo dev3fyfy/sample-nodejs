@@ -32,7 +32,7 @@ jobs:
 
                git checkout "$branch"
                commit_id_master=git log --oneline master
-               git cherry-pick commit_id_master
+               git cherry-pick ${commit_id_master}
                git commit -m "Cherry-picked commit from master branch"
                git push origin "$branch"
           
