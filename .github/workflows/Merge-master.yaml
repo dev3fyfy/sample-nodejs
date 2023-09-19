@@ -31,8 +31,9 @@ jobs:
           for branch in "${BRANCHES[@]}"; do
             if [ "$branch" != "master" ]; then
 
+              
+               commit_id_master=git log --oneline
                git checkout "$branch"
-               commit_id_master=git log --oneline master
                echo "${commit_id_master}"
 #               # git cherry-pick ${commit_id_master}
  #              # git commit -m "Cherry-picked commit from master branch"
