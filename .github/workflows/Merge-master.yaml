@@ -28,13 +28,14 @@ jobs:
           up_to_date_braches=""
           echo "REPOSITORY_NAME=$GITHUB_REPOSITORY" >> $GITHUB_ENV    
           IFS=',' read -ra BRANCHES <<< "${BRANCHES}"
+          git show HEAD --format=%H
           for branch in "${BRANCHES[@]}"; do
             if [ "$branch" != "master" ]; then
 
                git show HEAD --format=%H
-               commit_id_master=git show HEAD --format=%H
-               git checkout "$branch"
-               echo "${commit_id_master}"
+#               commit_id_master=git show HEAD --format=%H
+#               git checkout "$branch"
+#               echo "${commit_id_master}"
 #               # git cherry-pick ${commit_id_master}
  #              # git commit -m "Cherry-picked commit from master branch"
   #             # git push origin "$branch"
