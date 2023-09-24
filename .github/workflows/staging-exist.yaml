@@ -1,0 +1,25 @@
+name: Check PR change in staging
+
+on:
+  pull_request:
+    branches: [ master ]
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v3
+
+      - name: Fetch latest changes
+        run: git fetch origin
+
+      - name: Check if PR change exists in staging
+        run: |
+          git diff --name-only master@{upstream}
+          if [[ $? -eq 0 ]]; then
+            echo "PR change exists in staging"
+          else
+            echo "PR change does not exist in staging"
+            exit 1
+          fi
