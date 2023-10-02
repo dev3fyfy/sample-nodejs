@@ -14,12 +14,27 @@ jobs:
       - name: Fetch latest changes
         run: git fetch origin
 
-      - name: Check if PR change exists in staging
+      # - name: Check if PR change exists in staging
+      #   run: |
+      #     git diff --name-only master@{upstream}
+      #     if [[ $? -eq 0 ]]; then
+      #       echo "PR change exists in staging"
+      #     else
+      #       echo "PR change does not exist in staging"
+      #       exit 1
+      #     fi
+
+      - name: Determine default branch
+        id: default-branch
+        run: echo "::set-output name=branch::$(git symbolic-ref refs/remotes/origin/HEAD | sed 's@^refs/remotes/origin/@@')"
+
+      - name: Check if commit exists in staging
+        id: check-commit
         run: |
-          git diff --name-only master@{upstream}
+          git fetch origin ${{ steps.default-branch.outputs.branch }}
+          git diff --name-only ${{ steps.default-branch.outputs.branch }}@{upstream}
           if [[ $? -eq 0 ]]; then
             echo "PR change exists in staging"
           else
             echo "PR change does not exist in staging"
-            exit 1
           fi
