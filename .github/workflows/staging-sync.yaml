@@ -1,0 +1,32 @@
+name: Pull Request Validation
+
+on:
+  pull_request:
+    types:
+      - opened
+      - synchronize
+      - reopened
+    branches: [master]
+
+jobs:
+  check-commit-in-staging:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v2
+
+      - name: Check if commit exists in staging
+        id: check-commit
+        run: |
+          git fetch origin staging
+          COMMIT_EXISTS=$(git cherry -v staging | grep -c "${{ github.event.pull_request.head.sha }}")
+          echo "::set-output name=commit_exists::$COMMIT_EXISTS"
+
+      - name: Close pull request
+        if: steps.check-commit.outputs.commit_exists == '0'
+        run: |
+          echo "The commit does not exist in the staging branch, closing the pull request."
+          TOKEN="${{ secrets.PERSONAL_TOKEN }}"
+          API_URL="https://api.github.com/repos/${{ github.repository }}/pulls/${{ github.event.pull_request.number }}"
+          curl -X PATCH -H "Authorization: Bearer $TOKEN" -H "Content-Type: application/json" -d '{"state":"closed"}' $API_URL
