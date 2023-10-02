@@ -1,40 +1,33 @@
-name: Check PR change in staging
+name: Pull Request Validation
 
 on:
   pull_request:
-    branches: [ master ]
+    types:
+      - opened
+      - synchronize
+      - reopened
+    branches: [master]
 
 jobs:
-  build:
+  check-commit-in-staging:
     runs-on: ubuntu-latest
 
     steps:
-      - uses: actions/checkout@v3
-
-      - name: Fetch latest changes
-        run: git fetch origin
-
-      # - name: Check if PR change exists in staging
-      #   run: |
-      #     git diff --name-only master@{upstream}
-      #     if [[ $? -eq 0 ]]; then
-      #       echo "PR change exists in staging"
-      #     else
-      #       echo "PR change does not exist in staging"
-      #       exit 1
-      #     fi
-
-      - name: Determine default branch
-        id: default-branch
-        run: echo "::set-output name=branch::$(git symbolic-ref refs/remotes/origin/HEAD | sed 's@^refs/remotes/origin/@@')"
+      - name: Checkout code
+        uses: actions/checkout@v3
 
       - name: Check if commit exists in staging
         id: check-commit
         run: |
-          git fetch origin ${{ steps.default-branch.outputs.branch }}
-          git diff --name-only ${{ steps.default-branch.outputs.branch }}@{upstream}
-          if [[ $? -eq 0 ]]; then
-            echo "PR change exists in staging"
-          else
-            echo "PR change does not exist in staging"
-          fi
+          git fetch origin staging
+          git checkout staging
+          COMMIT_EXISTS=$(git cherry -v staging | grep -c "${{ github.event.pull_request.head.sha }}")
+          echo "::set-output name=commit_exists::$COMMIT_EXISTS"
+
+      - name: Close pull request
+        if: steps.check-commit.outputs.commit_exists == '0'
+        run: |
+          echo "The commit does not exist in the staging branch, closing the pull request."
+          TOKEN="${{ secrets.PERSONAL_TOKEN }}"
+          API_URL="https://api.github.com/repos/${{ github.repository }}/pulls/${{ github.event.pull_request.number }}"
+          curl -X PATCH -H "Authorization: Bearer $TOKEN" -H "Content-Type: application/json" -d '{"state":"closed"}' $API_URL
