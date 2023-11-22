@@ -21,7 +21,7 @@ jobs:
       - name: Merge changes into other branches
         shell: bash
         run: |
-         echo "test-test"
+         echo "test-test-test"
           git config user.name "dev3fyfy"
           git config user.email "dev.ahmed.afifi@gmail.com"
           conflicts_branches=""
