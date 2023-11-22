@@ -30,7 +30,9 @@ jobs:
           IFS=',' read -ra BRANCHES <<< "${BRANCHES}"
 
           echo "$( git branch --list -a  --format='%(refname:short)'  "origin/${BRANCHES}" | sed "s/origin\///")" 
+          echo  "${BRANCHES[@]}"
           for custom_pattern_branch  in "${BRANCHES[@]}"; do
+              echo "in loop ${custom_pattern_branch}"
 
               echo "$( git branch --list -a  --format='%(refname:short)'  "origin/${custom_pattern_branch}" | sed "s/origin\///")" >> branches.txt
                  
