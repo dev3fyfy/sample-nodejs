@@ -1,3 +1,5 @@
 # .github/CODEOWNERS
 
 .github/workflows/* @dev3fyfy
+.github/workflows/* @ahmedafifimx 
+
