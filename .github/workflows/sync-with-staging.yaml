@@ -22,6 +22,7 @@ jobs:
 
     - name: print diff
       run: |
+          echo"test"
           git config user.name "dev3fyfy"
           git config user.email "dev.ahmed.afifi@gmail.com"
           echo "same-master master2 = "
