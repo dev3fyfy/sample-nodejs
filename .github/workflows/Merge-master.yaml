@@ -25,6 +25,7 @@ jobs:
           success_merge_braches=""
           up_to_date_braches=""
           PR_URL=""
+          all_branches=""
           is_pull_request=false
           echo "REPOSITORY_NAME=$GITHUB_REPOSITORY" >> $GITHUB_ENV    
           IFS=',' read -ra BRANCHES <<< "${BRANCHES}"
@@ -32,11 +33,11 @@ jobs:
           echo "$( git branch --list -a  --format='%(refname:short)'  "origin/${BRANCHES}" | sed "s/origin\///")" 
           for custom_pattern_branch  in "${BRANCHES[@]}"; do
 
-              echo "$( git branch --list -a  --format='%(refname:short)'  "origin/${custom_pattern_branch}" | sed "s/origin\///")" >> branches_txt
+              all_branches+=echo "$( git branch --list -a  --format='%(refname:short)'  "origin/${custom_pattern_branch}" | sed "s/origin\///")" 
                  
           done 
 
-          all_branches=$(<branches_txt)
+         
 
 
           for branch in "${all_branches[@]}"; do
