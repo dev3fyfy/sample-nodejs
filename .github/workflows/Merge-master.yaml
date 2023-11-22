@@ -26,7 +26,7 @@ jobs:
           git config user.email "dev.ahmed.afifi@gmail.com"
           conflicts_branches=""
           success_merge_braches=""
-          up_to_date_status=""
+          up_to_date_status="---"
           up_to_date_braches=""
           echo "REPOSITORY_NAME=$GITHUB_REPOSITORY" >> $GITHUB_ENV    
           IFS=',' read -ra BRANCHES <<< "${BRANCHES}"
