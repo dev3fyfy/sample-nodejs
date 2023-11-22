@@ -1,6 +1,5 @@
 ## Getting Started
 
-<<<<<<< HEAD
 We provide a sample app using Node.js that you can deploy on App Platform. These steps will get this sample application running for you using App Platform.
 
 **Note: Following these steps may result in charges for the use of DigitalOcean services.**
@@ -8,7 +7,7 @@ We provide a sample app using Node.js that you can deploy on App Platform. These
 ### Requirements
 
 * You need a DigitalOcean account. If you don't already have one, you can sign up at https://cloud.digitalocean.com/registrations/new.
-=======
+
 These steps will get this sample application running for you using DigitalOcean.
 pr test1 test1
 **Note: Following these steps will result in charges for the use of DigitalOcean services**
@@ -18,9 +17,19 @@ aaaa
 
 aa
 ## Requirements
+## Requirements
+## Requirements
+## Requirements
+* You need a DigitalOcean account. If you don't already have one, you can sign up at https://cloud.digitalocean.com/registrations/new
+* You need a DigitalOcean account. If you don't already have one, you can sign up at https://cloud.digitalocean.com/registrations/new
+* You need a Digit
+*
+* alOcean account. If you don't already have one, you can sign up at https://cloud.digitalocean.com/registrations/new
+* You need a DigitalOcean account. If you don't already have one, you can sign up at https://cloud.digitalocean.com/registrations/new
 * You need a DigitalOcean account. If you don't already have one, you can sign up at https://cloud.digitalocean.com/registrations/new
 * You need a DigitalOcean account. If you don't already have one, you can sign up at https://cloud.digitalocean.com/registrations/new
 
+* You need a DigitalOcean account. If you don't already have one, you can sign up at https://cloud.digitalocean.com/registrations/new
 * You need a DigitalOcean account. If you don't already have one, you can sign up at https://cloud.digitalocean.com/registrations/new
 
 Test3Test3Test3Test3
@@ -28,12 +37,38 @@ Test3Test3Test3Test3
 
 Test3Test3
     aaaaa
+    aaaaa
+    aaaaa
+st3Test3Test3
+    Test3Test3
 
-    
+Test3Test3
+    aaaaa
+    aaaaa
+    aaaaa
+* You need a DigitalOcean account. If you don't already have one, you can sign up at https://cloud.digitalocean.com/registrations/new
+
+Test3Test3Test3Test3
+    Test3Test3
+
+Test3Test3
+    aaaaa
+    aaaaa
+    aaaaa
+st3Test3Test3
+    Test3Test3
+
+Test3Test3
+    aaaaa
+    aaaaa
+    aaaaa
+
+## Forking the Sample App Source Code
+## Forking the Sample App Source Code
+## Forking the Sample App Source Code    
 ## Forking the Sample App Source Code
 ## Forking the Sample App Source Code
 ## Forking the Sample App Source Code
->>>>>>> origin/master
 
 ## Deploying the App
 
@@ -63,7 +98,6 @@ If you followed the steps to fork the repo and used your own copy when deploying
 
 Here's an example code change you can make for this app:
 
-<<<<<<< HEAD
 1. Edit code within the repository
 1. Commit the change to the `main` branch. Normally it's a better practice to create a new branch for your change and then merge that branch to `main` after review, but for this demo you can commit to the `main` branch directly.
 1. Visit https://cloud.digitalocean.com/apps and navigate to your sample app.
@@ -71,14 +105,18 @@ Here's an example code change you can make for this app:
 1. Once the build completes successfully, click the **Live App** link in the header and you should see your updated application running. You may need to force refresh the page in your browser (e.g. using **Shift+Reload**).
 
 ### Learn More
-=======
 ## Learn More ##
 ## Learn More ##
 You can learn more about the App Platform and how to manage and update your application at https://www.digitalocean.com/docs/apps/.
->>>>>>> origin/master
 
 You can learn more about the App Platform and how to manage and update your application at https://www.digitalocean.com/docs/app-platform/.
 
+## Deleting the App ### Learn More ##
+## Learn More ##
+You can learn more about the App Platform and how to manage and update your application at https://www.digitalocean.com/docs/apps/.
+
+
+## Deleting the App #
 ## Deleting the App
 
 When you no longer need this sample application running live, you can delete it by following these steps:
